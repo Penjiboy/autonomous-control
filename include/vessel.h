@@ -7,6 +7,9 @@
 
 class Vessel {
 public:
+    /**
+     * Constructor of a vessel object.
+     */
     Vessel(); //Constructor a vessel object
     ~Vessel(); // Destructor
 
@@ -18,8 +21,28 @@ public:
     long relativeVelocityX;
     long relativeVelocityY;
 
-    long calculateProximity(); // calculate the proximity of the vessel in relation to Frank
+    /**
+     * Determine the proximity of this vessel in relation to Frank
+     * @return euclidean distance to Frank
+     */
+    long calculateProximity();
     long calculateVelocity(); //calculate the velocity of the vessel in relation to Frank
+
+    /**
+     * Update the current position of this vessel. Ideally to be called by AIS
+     * @param x position
+     * @param y position
+     * @modifies relativePositionX and relativePositionY
+     */
+    void updatePosition(long x, long y);
+
+    /**
+     * Request an update of the relative position. Ideally to be called by Control
+     */
+    void requestUpdatePosition();
+
+    //The vessel ID of this vessel
+    long vesselID;
 };
 
 
