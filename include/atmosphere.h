@@ -22,13 +22,13 @@ public:
      * Reads from the file and returns the current atmosphereic pressure
      * @returns pressure in pa as a double value
      */
-    double currentPressure(void);
+    double currentPressure();
     
     /**
      * Reads from the file and returns the current temperature
      * @returns temperature in degree celsius as a double value
      */
-    double currentTemperature(void);
+    double currentTemperature();
     
     
 private:

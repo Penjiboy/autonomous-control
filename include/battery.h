@@ -27,7 +27,7 @@ public:
      * reads input and give the battery's current full capacity
      * @return the capacity in mAh
      */
-    long fullCapacity(void);
+    long fullCapacity();
     
     /**
      * read from file and gives the remaining charge left in the battery
@@ -39,19 +39,19 @@ public:
      * read from file and give the battery's cycle count(A cycle is from fully charged to discharge)
      * @return the battery cycle count
      */
-    long cycleLife(void);
+    long cycleLife();
     
     /**
      * Reads from file ang gives a list of all devices that are using power
      * @return a list of devices
      */
-    Vector<String> devicesInUse(void);
+    Vector<String> devicesInUse();
     
     /**
      * Reads from the input and output power and determines if the net charge is increasing
      * @return a boolean value, true for charging, false for discharging
      */
-    bool isCharging(void); //return if the over all charge is increasing
+    bool isCharging(); //return if the over all charge is increasing
     
     /**
      * Reads from the file and determine the output level for a specific device
