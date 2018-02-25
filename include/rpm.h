@@ -6,6 +6,8 @@
 #define RPM_H
 
 #include <vector>
+#include <cstdio>
+#include <stdio.h>
 
 class Rpm {
 public:
@@ -29,11 +31,11 @@ public:
      * Constructor for the RPM object
      * @param file containing the sensor data
      */
-    Rpm(File file);
+    explicit Rpm(FILE* file);
 
 private:
     //File containing the sensor input data
-    File file;
+    FILE* file;
 
     struct reading {
         long value; //the actual rpm reading
@@ -41,7 +43,8 @@ private:
     };
 
     // A data structure to hold a number of rpm readings for analysis
-    vector<reading> readings;
+    // In the constructor we might want to consider setting the maximum capacity for this vector so that it doesn't get crazy
+    std::vector<reading>* readings;
 
     /**
      * Read the input file to process new rpm readings
