@@ -6,7 +6,9 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <math>
+#include <cmath>
+#include <vector>
+#include <queue>
 
 using namespace std;
 
@@ -14,13 +16,20 @@ ifstream mainPoints ("wayPoints.txt");
 ifstream upperPoints ("upperPoints.txt");
 ifstream lowerPoints ("lowerPoints.txt");
 
-queue<vector<double>> lowerQueue;
+queue<vector<double>> upperQueue;
 queue<vector<double>> lowerQueue;
 queue<vector<double>> mainQueue;
 
+/*
+* Method that returns the slope between point1 and point2
+*/
+double slope(vector<double> point1, vector<double> point2){
+    return (point2[1] - point1[1]) / (point2[0] - point1[0]) ;
+}
+
 void main () {
 
-string line
+string line;
 double latitude;
 double longitude;
 
@@ -125,17 +134,12 @@ upperPoints.close();
 lowerPoints.close();
 
 
-//Check every 20 m once gps is pinged 
+//Check every 20 m once gps is pinged
+    /*
 if(!checkLine)
 rudderAngle =  newRudderAngle(gps, lower, upper,main); //send this angle to rudder control
-
-
+    */
 }
-
-
-
-
-
 
 
 /*
@@ -151,11 +155,7 @@ return sqrt( (dest[1] - gps[1])*(dest[1] - gps[1])
 
 double deviatationAngle(vector<double> gps, vector<double> dest){
 
-
-return arctan(slope(gps,dest));
-
-
-
+return atan(slope(gps,dest));
 }
 
 /*
@@ -164,19 +164,6 @@ return arctan(slope(gps,dest));
 bool checkLine( vector<double> point, vector<double> point1, vector<double> point2){
 
     return slope(point1, point2) == slope(point, point1);
-
-
-
-
-}
-
-/*
-* Method that returns the slope between point1 and point2
-*/
-double slope(vector<double> point1, vector<double> point2){
-   
-   return (point2[1] - point1[1]) / (point2[0] - point1[0]) ;
-
 
 }
 
