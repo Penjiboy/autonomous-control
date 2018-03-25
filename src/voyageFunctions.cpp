@@ -27,7 +27,7 @@ double slope(vector<double> point1, vector<double> point2){
     return (point2[1] - point1[1]) / (point2[0] - point1[0]) ;
 }
 
-void main () {
+int main () {
 
 string line;
 double latitude;
