@@ -1,6 +1,7 @@
 #include "motor.h"
 #include "rudder.h"
 #include "pins.h"
+#include "rasPiSerial.h"
 
 #define GPSSERIAL Serial1
 
@@ -27,6 +28,9 @@ void setup() {
 }
 
 void loop() {
+  if(Serial.available() {
+    RasPiMessage* message = readSerial(Serial.read());
+  })
   delay(2500);
 }
 
