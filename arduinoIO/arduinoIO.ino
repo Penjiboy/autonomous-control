@@ -28,9 +28,12 @@ void setup() {
 }
 
 void loop() {
-  if(Serial.available() {
+  if(Serial.available()) {
     RasPiMessage* message = readSerial(Serial.read());
-  })
+  }
+  if(!RasPiSerial.messageQueue.empty){
+    delegateMessageResponsibility(queue.front());
+  }
   delay(2500);
 }
 

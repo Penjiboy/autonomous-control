@@ -2,6 +2,7 @@
 #define RAS_PI_SERIAL_H
 
 #include <string>
+#include <queue>
 
 using namespace std;
 
@@ -19,12 +20,13 @@ struct RasPiMessage {
 
 class RasPiSerial {
 public:
+    static queue<RasPiMessage*> messageQueue;
 
     /**
      * Read serial input and return a pointer to the constructed
      * RasPiMessage object
      */
-    RasPiMessage* readSerial(string& inMessage);
+    void readSerial(string& inMessage);
 
     /**
      * Build an output string to be written to the serial output
@@ -37,6 +39,12 @@ public:
      * to be written to the serial output for the RasPi
      */
     string buildOutMessage(ICode iCode, uint id, string messageBody);
+
+    /**
+     * Depending on the message contents, delegate responsibility
+     * to the appropriate part of the system
+     */
+    void delegateMessageResponsibility(RasPiMessage* &message);
 };
 
 #endif

@@ -1,12 +1,12 @@
 #include "rasPiSerial.h"
 
-RasPiMessage* RasPiSerial::readSerial(string& inMessage){
-    //TODO: Implement this function
+void RasPiSerial::readSerial(string& inMessage){
     RasPiMessage* result = new RasPiMessage();
 
     if(inMessage[0] != '$'){
         result->iCode = ERR;
-        return result;
+        RasPiSerial.messageQueue.enqueue(result);
+        //return result;
     }
 
     string newICode = inMessage.substr(1,3);
@@ -20,7 +20,8 @@ RasPiMessage* RasPiSerial::readSerial(string& inMessage){
     result->id = stoi(inMessage.substr(4,2));
     result->messageBody = inMessage.substr(6);
 
-    return result;
+    RasPiSerial.messageQueue.push(result);
+    //return result;
 }
 
 string RasPiSerial::buildOutMessage(const RasPiMessage& outMessage){
@@ -44,4 +45,14 @@ string RasPiSerial::buildOutMessage(ICode iCode, uint id, string messageBody){
     result += id;
     result += messageBody;
     return result;
+}
+
+void RasPiSerial::delegateMessageResponsibility(RasPiMessage* &message){
+    //TODO: Implement this
+
+    // determine who responsibility should go to
+
+    // act on the message
+
+    // Remember to free the memory assigned to the message and to dequeue the message from the queue
 }
