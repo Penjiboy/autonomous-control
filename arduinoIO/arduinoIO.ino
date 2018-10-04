@@ -37,7 +37,7 @@ void serialEvent1() {
   }
 }
 
-void parseNMEA() {
+void parseNMEA(char nmea[82]) {
   sscanf(NMEAbuf, "%[$!]%2s%3s%*[^*]*%2x", start_delimiter, message_talker, message_id, checksum);
 
   switch(message_id) {
@@ -45,6 +45,3 @@ void parseNMEA() {
     default:
   }
 }
-
-
-
