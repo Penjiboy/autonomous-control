@@ -1,8 +1,14 @@
 #ifndef RAS_PI_SERIAL_H
 #define RAS_PI_SERIAL_H
 
-#include <string>
-#include <queue>
+//#include <string.h>
+//#include <queue.h>
+//#include <queue>
+//#include <queue.h>
+//#include <QueueArray.h>
+//#include "QueueArray.h"
+#include "libraries/QueueArray.h"
+#include "componentIDs.h"
 
 using namespace std;
 
@@ -12,39 +18,33 @@ enum ICode {
 };
 
 struct RasPiMessage {
-    string fullMessage;
+    String fullMessage;
     ICode iCode;
-    uint id;
-    string messageBody;
+    int id;
+    String messageBody;
 };
 
 class RasPiSerial {
 public:
-    static queue<RasPiMessage*> messageQueue;
+    static QueueArray<RasPiMessage*> messageQueue;
 
     /**
      * Read serial input and return a pointer to the constructed
      * RasPiMessage object
      */
-    void readSerial(string& inMessage);
+    static void readSerial(String inMessage);
 
     /**
-     * Build an output string to be written to the serial output
+     * Build an output String to be written to the serial output
      * for the RasPi
      */
-    string buildOutMessage(const RasPiMessage& outMessage);
+    static String buildOutMessage(const RasPiMessage& outMessage);
     
     /**
-     * Build an output string given the individual parameters
+     * Build an output String given the individual parameters
      * to be written to the serial output for the RasPi
      */
-    string buildOutMessage(ICode iCode, uint id, string messageBody);
-
-    /**
-     * Depending on the message contents, delegate responsibility
-     * to the appropriate part of the system
-     */
-    void delegateMessageResponsibility(RasPiMessage* &message);
+    static String buildOutMessage(ICode iCode, int id, String messageBody);
 };
 
 #endif

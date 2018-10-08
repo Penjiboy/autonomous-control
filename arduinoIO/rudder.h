@@ -1,8 +1,8 @@
 #ifndef RUDDER_H
 #define RUDDER_H
 
-#include <Servo.h>
 #include <Arduino.h>
+#include "Servo.h"
 
 class Rudder {
 	float angle_;
