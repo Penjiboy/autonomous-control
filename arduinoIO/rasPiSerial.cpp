@@ -1,16 +1,14 @@
 #include "rasPiSerial.h"
 
-static void RasPiSerial::readSerial(String inMessage){
+void RasPiSerial::readSerial(String inMessage){
     RasPiMessage* result = new RasPiMessage();
 
     if(inMessage[0] != '$'){
         result->iCode = ERR;
-        RasPiSerial::messageQueue.push(result);
-        //RasPiSerial::messageQueue.enqueue(result);
-        //return result;
+        messageQueue.push(result);
     }
 
-    String newICode = inMessage.substr(1,3);
+    String newICode = inMessage.substring(1,4);
     result->iCode = 
         newICode == "GET" ? GET : 
         (newICode == "SET" ? SET : (
@@ -18,15 +16,13 @@ static void RasPiSerial::readSerial(String inMessage){
             )
         );
 
-    result->id = stoi(inMessage.substr(4,2));
-    result->messageBody = inMessage.substr(6);
+    result->id = inMessage.substring(4,6).toInt();
+    result->messageBody = inMessage.substring(6);
 
-    RasPiSerial::messageQueue.push(result);
-    //RasPiSerial::messageQueue.enqueue(result);
-    //return result;
+    messageQueue.push(result);
 }
 
-static String RasPiSerial::buildOutMessage(const RasPiMessage& outMessage){
+String RasPiSerial::buildOutMessage(const RasPiMessage& outMessage){
     if(!&(outMessage.fullMessage)){
         return outMessage.fullMessage;
     }
@@ -34,7 +30,7 @@ static String RasPiSerial::buildOutMessage(const RasPiMessage& outMessage){
     return (RasPiSerial::buildOutMessage(outMessage.iCode, outMessage.id, outMessage.messageBody));
 }
 
-static String RasPiSerial::buildOutMessage(ICode iCode, int id, String messageBody){
+String RasPiSerial::buildOutMessage(ICode iCode, int id, String messageBody){
     String result = "$";
     
     switch(iCode){

@@ -7,7 +7,7 @@
 //#include <queue.h>
 //#include <QueueArray.h>
 //#include "QueueArray.h"
-#include "libraries/QueueArray.h"
+#include "libraries/QueueArray/QueueArray.h"
 #include "componentIDs.h"
 
 using namespace std;
@@ -26,25 +26,25 @@ struct RasPiMessage {
 
 class RasPiSerial {
 public:
-    static QueueArray<RasPiMessage*> messageQueue;
+    QueueArray <RasPiMessage*> messageQueue;
 
     /**
      * Read serial input and return a pointer to the constructed
      * RasPiMessage object
      */
-    static void readSerial(String inMessage);
+    void readSerial(String inMessage);
 
     /**
      * Build an output String to be written to the serial output
      * for the RasPi
      */
-    static String buildOutMessage(const RasPiMessage& outMessage);
+    String buildOutMessage(const RasPiMessage& outMessage);
     
     /**
      * Build an output String given the individual parameters
      * to be written to the serial output for the RasPi
      */
-    static String buildOutMessage(ICode iCode, int id, String messageBody);
+    String buildOutMessage(ICode iCode, int id, String messageBody);
 };
 
 #endif
