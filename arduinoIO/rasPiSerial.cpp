@@ -40,7 +40,7 @@ String RasPiSerial::buildOutMessage(ICode iCode, int id, String messageBody){
         default: result += "ERR"; break;
     }
 
-    result += id;
+    result += id < 10 ? ("0" + (String) id) : id;
     result += messageBody;
     return result;
 }

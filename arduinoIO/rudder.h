@@ -12,7 +12,7 @@ class Rudder {
 public:
   void begin(int pin);
 
-  void setAngle(float speed);
+  void setAngle(float angle);
   float getAngle();
 private:
   void debug(String msg);

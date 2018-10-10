@@ -36,8 +36,6 @@ void loop() {
     delegateMessageResponsibility(rasPiSerialInstance->messageQueue.front());
   }
   delay(2500);
-
-  Serial.println("loop iteration");
 }
 
 void serialEvent1() {
@@ -48,7 +46,7 @@ void serialEvent1() {
 }
 
 void serialEvent() {
-  Serial.println("serialEvent");
+  //Serial.println("serialEvent");
   if(Serial.available()) {
     rasPiSerialInstance->readSerial(Serial.readString());
   }
@@ -79,22 +77,22 @@ void delegateMessageResponsibility(RasPiMessage* message){
 
     case GPS_LATITUDE_ID: {
       if(message->iCode == ICode::SET){
-        // set GPS latitude
-        Serial.println("Setting GPS latitude not yet implemented");
+        Serial.println("Cannot set GPS Latitude");
       } else if(message->iCode == ICode::GET) {
         // get GPS latitude
-        Serial.println("Getting GPS latitude not yet implemented");
+        Serial.println("Getting GPS latitude not yet implemented, tempVal=25.0000");
+        Serial.println(rasPiSerialInstance->buildOutMessage(ICode::VAL, 1, "25.0000"));
       }
       break;
     }
 
     case GPS_LONGITUDE_ID: {
       if(message->iCode == ICode::SET){
-        // set GPS longitude
-        Serial.println("Setting GPS longitude not yet implemented");
+        Serial.println("Cannot set longitude");
       } else if(message->iCode == ICode::GET) {
           // get GPS longitude
-        Serial.println("Getting GPS longitude not yet implemented");
+        Serial.println("Getting GPS longitude not yet implemented, tempVal=50.0000");
+        Serial.println(rasPiSerialInstance->buildOutMessage(ICode::VAL, 2, "50.0000"));
       }
       break;
     }
@@ -104,7 +102,8 @@ void delegateMessageResponsibility(RasPiMessage* message){
         Serial.println("Can't set Motor power (watts)");
       } else if(message->iCode == ICode::GET) {
           // get Motor power (Watts)
-        Serial.println("Getting Motor power (Watts) not yet implemented");
+        Serial.println("Getting Motor power (Watts) not yet implemented, tempVal=5");
+        Serial.println(rasPiSerialInstance->buildOutMessage(ICode::VAL, 3, "5"));
       }
       break;
     }
@@ -114,7 +113,8 @@ void delegateMessageResponsibility(RasPiMessage* message){
         Serial.println("Can't set Battery level (percent)");
       } else if(message->iCode == ICode::GET) {
           // get Battery level (percent)
-        Serial.println("Getting Battery level (percent) not yet implemented");
+        Serial.println("Getting Battery level (percent) not yet implemented, tempVal=65");
+        Serial.println(rasPiSerialInstance->buildOutMessage(ICode::VAL, 4, "65"));
       }
       break;
     }
@@ -124,7 +124,8 @@ void delegateMessageResponsibility(RasPiMessage* message){
         Serial.println("Can't set Motor temperature (Kelvin)");
       } else if(message->iCode == ICode::GET) {
           // get Motor temperature (Kelvin)
-        Serial.println("Getting Motor temperature (Kelvin) not yet implemented");
+        Serial.println("Getting Motor temperature (Kelvin) not yet implemented, tempVal=130");
+        Serial.println(rasPiSerialInstance->buildOutMessage(ICode::VAL, 5, "130"));
       }
       break;
     }
@@ -134,7 +135,8 @@ void delegateMessageResponsibility(RasPiMessage* message){
         Serial.println("Can't set Battery volatage");
       } else if(message->iCode == ICode::GET) {
           // get Battery voltage
-        Serial.println("Getting Battery voltage not yet implemented");
+        Serial.println("Getting Battery voltage not yet implemented, tempVal=3.3");
+        Serial.println(rasPiSerialInstance->buildOutMessage(ICode::VAL, 6, "3.3"));
       }
       break;
     }
@@ -153,6 +155,10 @@ void delegateMessageResponsibility(RasPiMessage* message){
       if(message->iCode == ICode::SET){
         // set Rudder angle (degrees)
         Serial.println("Setting Rudder angle (degrees) not yet implemented");
+        float angle = message->messageBody.toFloat();
+        rudder.setAngle(angle);
+        Serial.print("Rudder angle set to ");
+        Serial.println(angle);
       } else if(message->iCode == ICode::GET) {
         Serial.println("Shouldn't have to get Rudder angle (degrees)");
       }
