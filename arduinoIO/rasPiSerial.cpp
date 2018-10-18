@@ -42,5 +42,6 @@ String RasPiSerial::buildOutMessage(ICode iCode, int id, String messageBody){
 
     result += id < 10 ? ("0" + (String) id) : id;
     result += messageBody;
+    result += '*';
     return result;
 }
