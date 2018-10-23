@@ -67,7 +67,7 @@ void parseNMEA() {
  */
 void delegateMessageResponsibility(RasPiMessage* message){
   if(message->iCode == ICode::ERR){
-    Serial.println("Error in input message");
+    Serial.println("$ERR0RinInputMessage*");
     rasPiSerialInstance->messageQueue.pop();
     delete(message);
     return;
