@@ -7,9 +7,9 @@
 using namespace std;
 
 
-void SerialParse::setRpm(unsigned int rpmVal){
+void SerialParse::setRpm(int rpmVal){
     std::string message = "$SET07";
-    message = message + rpmVal + "*";
+    message = message + std::to_string(rpmVal) + "*";
     sendMessage(message);
 }
 
@@ -28,8 +28,8 @@ int SerialParse::getRpm(){
     }
     
     //check the ID
-    if(returnArg.subStr(4, 5).compare("07")){
-        return stoi(returnArg.subStr(6, 7));
+    if(returnArg.substr(4, 5).compare("07")){
+        return stoi(returnArg.substr(6, 7));
     }
     
     return -1;
@@ -50,8 +50,8 @@ double SerialParse::getLatitude(){
     }
     
     //check the ID
-    if(returnArg.subStr(4, 5).compare("01")){
-        return atof(returnArg.subStr(6, 7).c_str());
+    if(returnArg.substr(4, 5).compare("01")){
+        return atof(returnArg.substr(6, 7).c_str());
     }
     
     return -1;
@@ -59,9 +59,9 @@ double SerialParse::getLatitude(){
 
 
 
-void SerialParse::setLatitude(signed double latitudeVal){
+void SerialParse::setLatitude(double latitudeVal){
     std::string message = "$SET01";
-    message = message + latitudeVal + "*";
+    message = message + std::to_string(latitudeVal) + "*";
     sendMessage(message);
     
 }
@@ -81,8 +81,8 @@ double SerialParse::getLongitude(){
     }
     
     //check the ID
-    if(returnArg.subStr(4, 5).compare("02")){
-        return atof(returnArg.subStr(6, 7).c_str());
+    if(returnArg.substr(4, 5).compare("02")){
+        return atof(returnArg.substr(6, 7).c_str());
     }
     
     return -1;
@@ -90,9 +90,9 @@ double SerialParse::getLongitude(){
 
 
 
-void SerialParse::setLongitude(signed double longitudeVal){
+void SerialParse::setLongitude(double longitudeVal){
     std::string message = "$SET02";
-    message = message + longitudeVal + "*";
+    message = message + std::to_string(longitudeVal) + "*";
     sendMessage(message);
 }
 
@@ -111,8 +111,8 @@ double SerialParse::getMotorPower(){
     }
     
     //check the ID
-    if(returnArg.subStr(4, 5).compare("03")){
-        return atof(returnArg.subStr(6, 7).c_str());
+    if(returnArg.substr(4, 5).compare("03")){
+        return atof(returnArg.substr(6, 7).c_str());
     }
     
     return -1;
@@ -120,14 +120,14 @@ double SerialParse::getMotorPower(){
 
 
 
-void SerialParse::setMotorPower(unsigned double watt){
+void SerialParse::setMotorPower(double watt){
     std::string message = "$SET03";
-    message = message + watt + "*";
+    message = message + std::to_string(watt) + "*";
     sendMessage(message);
 }
 
 
-double SerialParse::getBatterLevel(){
+double SerialParse::getBatteryLevel(){
     std::string message = "$GET04*";
     
     std::string returnArg;
@@ -140,8 +140,8 @@ double SerialParse::getBatterLevel(){
     }
     
     //check the ID
-    if(returnArg.subStr(4, 5).compare("04")){
-        return atof(returnArg.subStr(6, 7).c_str());
+    if(returnArg.substr(4, 5).compare("04")){
+        return atof(returnArg.substr(6, 7).c_str());
     }
     
     return -1;
@@ -162,8 +162,8 @@ double SerialParse::getMotorTemperature(){
     }
     
     //check the ID
-    if(returnArg.subStr(4, 5).compare("05")){
-        return atof(returnArg.subStr(6, 7).c_str());
+    if(returnArg.substr(4, 5).compare("05")){
+        return atof(returnArg.substr(6, 7).c_str());
     }
     
     return -1;
@@ -184,8 +184,8 @@ double SerialParse::getBatteryVoltage(){
     }
     
     //check the ID
-    if(returnArg.subStr(4, 5).compare("06")){
-        return atof(returnArg.subStr(6, 7).c_str());
+    if(returnArg.substr(4, 5).compare("06")){
+        return atof(returnArg.substr(6, 7).c_str());
     }
     
     return -1;
@@ -206,8 +206,8 @@ double SerialParse::getRudderAngle(){
     }
     
     //check the ID
-    if(returnArg.subStr(4, 5).compare("51")){
-        return atof(returnArg.subStr(6, 7).c_str());
+    if(returnArg.substr(4, 5).compare("51")){
+        return atof(returnArg.substr(6, 7).c_str());
     }
     
     return -1;
@@ -215,9 +215,9 @@ double SerialParse::getRudderAngle(){
 
 
 
-void SerialParse::setRudderAngle(signed double angle){
+void SerialParse::setRudderAngle(double angle){
     std::string message = "$SET51";
-    message = message + angle + "*";
+    message = message + std::to_string(angle) + "*";
     sendMessage(message);
 }
 
@@ -229,7 +229,7 @@ void SerialParse::sendMessage(std::string & message){
     writeFile.open("serialLogs.txt", ios::ate);
     message = message + "\n";
     
-    writeFile.write( message, sizeof(char)*message.length());
+    writeFile.write( message.c_str(), sizeof(char)*message.length());
     
     writeFile.close();
 }
@@ -238,14 +238,14 @@ void SerialParse::sendMessage(std::string & message){
 
 bool SerialParse::receiveMessage(std::string returnArg){
     std::ifstream file("serialLogs.txt");
-    std::string str, subString;
+    std::string str, substring;
     
     std::getline(file, str);
     
-    subString = str.subStr(1, 3);
+    substring = str.substr(1, 3);
     
-    if(subString.compare("VAL")){
-        returnArg = str.subStr(0, 7);
+    if(substring.compare("VAL")){
+        returnArg = str.substr(0, 7);
         return true;
     }
         

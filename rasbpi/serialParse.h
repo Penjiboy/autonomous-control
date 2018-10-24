@@ -7,20 +7,20 @@
  * Get the message to perform tasks according to set convention
  * "$[GET|SET|VAL]ID____0-32 characters____*"
  */
-Class SerialParse {
+class SerialParse {
 public:
     
     /* setRmp
      * parameter: rmpVal - the rpm value to set to
      * ID: 07
      */
-    void setRpm(unsigned int rpmVal);
+    void setRpm(int rpmVal);
     
     /* getRmp
      * returns: the rpm for the motor
      * ID: 07
      */
-    unsigned int getRpm();
+    int getRpm();
     
     /* getLatitude
      * returns: the Latitude
@@ -32,7 +32,7 @@ public:
      * parameter: latitudeVal - the latitude to set to, format: DDDMM.mmmmm
      * ID: 01
      */
-    void setLatitude(signed double latitudeVal);
+    void setLatitude(double latitudeVal);
     
     /* getLongitude
      * returns: the message that can be used to get longitude
@@ -44,7 +44,7 @@ public:
      * parameter: longitudeVal - the longitude to set to, format: DDDMM.mmmmm
      * ID: 02
      */
-    void setLongitude(signed double longitudeVal);
+    void setLongitude(double longitudeVal);
     
     /* getMotorPower
      * returns: the message that can be used to get the motor power
@@ -55,7 +55,7 @@ public:
     /* setMotorPower
      * ID: 03
      */
-    void setMotorPower(unsigned double watt);
+    void setMotorPower(double watt);
     
     /* getBatteryLevel
      * returns: the battery level
@@ -73,7 +73,7 @@ public:
      * returns: the battery level, value is signed double
      * ID: 06
      */
-    double getbatteryVoltage();
+    double getBatteryVoltage();
     
     /* getRudderAngle
      * returns: the rudder angle, value is signed double
@@ -85,7 +85,7 @@ public:
      * parameter: angle - the angle value to set to in signed double
      * ID: 51
      */
-    void setRudderAngle(signed double angle);
+    void setRudderAngle(double angle);
     
 private:
     
