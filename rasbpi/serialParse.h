@@ -10,6 +10,8 @@
 class SerialParse {
 public:
     
+    SerialParse();
+    
     /* setRmp
      * parameter: rmpVal - the rpm value to set to
      * ID: 07
@@ -92,7 +94,7 @@ private:
     /*
      * write the message to the file
      */
-    void sendMessage(std::string & message);
+    static void sendMessage(std::string & message);
 
     
     /*
@@ -101,7 +103,7 @@ private:
      * return: true if value false otherwise
      * returnArg: the argument extracted from the line of code
      */
-    bool receiveMessage(std::string returnArg);
+    static bool receiveMessage(std::string &returnArg);
 };
 
 #endif

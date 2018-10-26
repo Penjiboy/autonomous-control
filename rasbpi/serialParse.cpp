@@ -3,13 +3,18 @@
 #include <fstream>
 #include <string>
 #include <stdlib.h>
+#include <iomanip> // setprecision
+#include <sstream> // stringstream
 
 using namespace std;
 
+SerialParse::SerialParse(){};
 
 void SerialParse::setRpm(int rpmVal){
     std::string message = "$SET07";
     message = message + std::to_string(rpmVal) + "*";
+    std::cout << "serialParse called, argument: " << rpmVal << "\n";
+    
     sendMessage(message);
 }
 
@@ -24,12 +29,13 @@ int SerialParse::getRpm(){
     
     //keep looping until a response is retrieved from the arduino
     while(!receiveMessage(returnArg)){
-        
+
     }
-    
+
     //check the ID
-    if(returnArg.substr(4, 5).compare("07")){
-        return stoi(returnArg.substr(6, 7));
+    if(returnArg.substr(0, 2) == "07"){
+        int msglen = (int)returnArg.length();
+        return stoi(returnArg.substr(2, msglen - 2));
     }
     
     return -1;
@@ -50,8 +56,9 @@ double SerialParse::getLatitude(){
     }
     
     //check the ID
-    if(returnArg.substr(4, 5).compare("01")){
-        return atof(returnArg.substr(6, 7).c_str());
+    if(returnArg.substr(0, 2) == "01"){
+        int msglen = (int)returnArg.length();
+        return atof(returnArg.substr(2, msglen - 2).c_str());
     }
     
     return -1;
@@ -61,7 +68,10 @@ double SerialParse::getLatitude(){
 
 void SerialParse::setLatitude(double latitudeVal){
     std::string message = "$SET01";
-    message = message + std::to_string(latitudeVal) + "*";
+    stringstream stream;
+    stream << fixed << setprecision(2) << latitudeVal;
+    
+    message = message + stream.str() + "*";
     sendMessage(message);
     
 }
@@ -81,8 +91,9 @@ double SerialParse::getLongitude(){
     }
     
     //check the ID
-    if(returnArg.substr(4, 5).compare("02")){
-        return atof(returnArg.substr(6, 7).c_str());
+    if(returnArg.substr(0, 2) == "02"){
+        int msglen = (int)returnArg.length();
+        return atof(returnArg.substr(2, msglen - 2).c_str());
     }
     
     return -1;
@@ -92,7 +103,10 @@ double SerialParse::getLongitude(){
 
 void SerialParse::setLongitude(double longitudeVal){
     std::string message = "$SET02";
-    message = message + std::to_string(longitudeVal) + "*";
+    stringstream stream;
+    stream << fixed << setprecision(2) << longitudeVal;
+    
+    message = message + stream.str() + "*";
     sendMessage(message);
 }
 
@@ -111,8 +125,9 @@ double SerialParse::getMotorPower(){
     }
     
     //check the ID
-    if(returnArg.substr(4, 5).compare("03")){
-        return atof(returnArg.substr(6, 7).c_str());
+    if(returnArg.substr(0, 2) == "03"){
+        int msglen = (int)returnArg.length();
+        return atof(returnArg.substr(2, msglen - 2).c_str());
     }
     
     return -1;
@@ -122,7 +137,10 @@ double SerialParse::getMotorPower(){
 
 void SerialParse::setMotorPower(double watt){
     std::string message = "$SET03";
-    message = message + std::to_string(watt) + "*";
+    stringstream stream;
+    stream << fixed << setprecision(2) << watt;
+    
+    message = message + stream.str() + "*";
     sendMessage(message);
 }
 
@@ -140,8 +158,9 @@ double SerialParse::getBatteryLevel(){
     }
     
     //check the ID
-    if(returnArg.substr(4, 5).compare("04")){
-        return atof(returnArg.substr(6, 7).c_str());
+    if(returnArg.substr(0, 2) == "04"){
+        int msglen = (int)returnArg.length();
+        return atof(returnArg.substr(2, msglen - 2).c_str());
     }
     
     return -1;
@@ -162,8 +181,9 @@ double SerialParse::getMotorTemperature(){
     }
     
     //check the ID
-    if(returnArg.substr(4, 5).compare("05")){
-        return atof(returnArg.substr(6, 7).c_str());
+    if(returnArg.substr(0, 2) == "05"){
+        int msglen = (int)returnArg.length();
+        return atof(returnArg.substr(2, msglen - 2).c_str());
     }
     
     return -1;
@@ -184,8 +204,9 @@ double SerialParse::getBatteryVoltage(){
     }
     
     //check the ID
-    if(returnArg.substr(4, 5).compare("06")){
-        return atof(returnArg.substr(6, 7).c_str());
+    if(returnArg.substr(0, 2) == "06"){
+        int msglen = (int)returnArg.length();
+        return atof(returnArg.substr(2, msglen - 2).c_str());
     }
     
     return -1;
@@ -206,8 +227,9 @@ double SerialParse::getRudderAngle(){
     }
     
     //check the ID
-    if(returnArg.substr(4, 5).compare("51")){
-        return atof(returnArg.substr(6, 7).c_str());
+    if(returnArg.substr(0, 2) == "51"){
+        int msglen = (int)returnArg.length();
+        return atof(returnArg.substr(2, msglen - 2).c_str());
     }
     
     return -1;
@@ -217,17 +239,27 @@ double SerialParse::getRudderAngle(){
 
 void SerialParse::setRudderAngle(double angle){
     std::string message = "$SET51";
-    message = message + std::to_string(angle) + "*";
+    
+    stringstream stream;
+    stream << fixed << setprecision(2) << angle;
+    
+    message = message + stream.str() + "*";
     sendMessage(message);
 }
 
 
 
 void SerialParse::sendMessage(std::string & message){
-    fstream writeFile;
+    ofstream writeFile;
+    std::cout << message <<endl;
     //open the file and set initial position at the end of the file
-    writeFile.open("serialLogs.txt", ios::ate);
-    message = message + "\n";
+    writeFile.open("serialLogs.txt", std::ios::app);
+    
+    message = "\n" + message;
+    
+    if (!writeFile.is_open()){
+        std::cout << "file cannot be opened!!\n" <<endl;
+    }
     
     writeFile.write( message.c_str(), sizeof(char)*message.length());
     
@@ -236,16 +268,51 @@ void SerialParse::sendMessage(std::string & message){
 
 
 
-bool SerialParse::receiveMessage(std::string returnArg){
-    std::ifstream file("serialLogs.txt");
+bool SerialParse::receiveMessage(std::string &returnArg){
+    std::ifstream file;
     std::string str, substring;
     
-    std::getline(file, str);
+    file.open("serialLogs.txt");
     
+    if(file.is_open()) {
+        file.seekg(-1,ios_base::end);                // go to one spot before the EOF
+        
+        bool keepLooping = true;
+        while(keepLooping) {
+            char ch;
+            file.get(ch);                            // Get current byte's data
+            
+            if((int)file.tellg() <= 1) {             // If the data was at or before the 0th byte
+                file.seekg(0);                       // The first line is the last line
+                keepLooping = false;                // So stop there
+            }
+            else if(ch == '\n') {                   // If the data was a newline
+                keepLooping = false;                // Stop at the current position.
+            }
+            else {                                  // If the data was neither a newline nor at the 0 byte
+                file.seekg(-2,ios_base::cur);        // Move to the front of that data, then to the front of the data before it
+            }
+        }
+        
+        getline(file,str);                      // Read the current line
+        //cout << "Result: " << str << '\n';     // Display it
+        
+        file.close();
+    }
+    
+    if(str.length() < 4){
+        std::cout << "error\n";
+        return false;
+    }
+
+    //std::cout << str << "str\n";
     substring = str.substr(1, 3);
+    //std::cout << substring;
     
-    if(substring.compare("VAL")){
-        returnArg = str.substr(0, 7);
+    if(substring == "VAL"){
+        int msglen = (int)str.length();
+        returnArg = str.substr(4, msglen - 5);
+        //std::cout << returnArg << endl;
         return true;
     }
         
