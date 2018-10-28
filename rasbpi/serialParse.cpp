@@ -13,7 +13,6 @@ SerialParse::SerialParse(){};
 void SerialParse::setRpm(int rpmVal){
     std::string message = "$SET07";
     message = message + std::to_string(rpmVal) + "*";
-    std::cout << "serialParse called, argument: " << rpmVal << "\n";
     
     sendMessage(message);
 }
@@ -65,7 +64,7 @@ double SerialParse::getLatitude(){
 }
 
 
-
+/*
 void SerialParse::setLatitude(double latitudeVal){
     std::string message = "$SET01";
     stringstream stream;
@@ -75,7 +74,7 @@ void SerialParse::setLatitude(double latitudeVal){
     sendMessage(message);
     
 }
-
+*/
 
 
 double SerialParse::getLongitude(){
@@ -100,7 +99,7 @@ double SerialParse::getLongitude(){
 }
 
 
-
+/*
 void SerialParse::setLongitude(double longitudeVal){
     std::string message = "$SET02";
     stringstream stream;
@@ -109,7 +108,7 @@ void SerialParse::setLongitude(double longitudeVal){
     message = message + stream.str() + "*";
     sendMessage(message);
 }
-
+*/
 
 
 double SerialParse::getMotorPower(){
@@ -275,6 +274,7 @@ bool SerialParse::receiveMessage(std::string &returnArg){
     file.open("serialLogs.txt");
     
     if(file.is_open()) {
+        cout << "file is open\n";
         file.seekg(-1,ios_base::end);                // go to one spot before the EOF
         
         bool keepLooping = true;
@@ -299,12 +299,14 @@ bool SerialParse::receiveMessage(std::string &returnArg){
         
         file.close();
     }
-    
+
+    /*
     if(str.length() < 4){
         std::cout << "error\n";
         return false;
     }
-
+    */
+     
     //std::cout << str << "str\n";
     substring = str.substr(1, 3);
     //std::cout << substring;

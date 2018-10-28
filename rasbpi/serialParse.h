@@ -34,7 +34,7 @@ public:
      * parameter: latitudeVal - the latitude to set to, format: DDDMM.mmmmm
      * ID: 01
      */
-    void setLatitude(double latitudeVal);
+    //void setLatitude(double latitudeVal);
     
     /* getLongitude
      * returns: the message that can be used to get longitude
@@ -46,7 +46,7 @@ public:
      * parameter: longitudeVal - the longitude to set to, format: DDDMM.mmmmm
      * ID: 02
      */
-    void setLongitude(double longitudeVal);
+    //void setLongitude(double longitudeVal);
     
     /* getMotorPower
      * returns: the message that can be used to get the motor power
