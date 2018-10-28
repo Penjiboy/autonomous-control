@@ -8,8 +8,8 @@ import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-ser = null
-serialLogsFile = null
+ser = None
+serialLogsFile = None
 filePosition = 0
 
 def serialRead() :
@@ -37,12 +37,15 @@ class Watcher:
         self.observer.start()
         try:
             while True:
+                print("entered Watcher loop, about to serial read")
                 messageToWriteToFile = serialRead()
+                print("finished serial reading")
                 event_handler.handleWriteToFile(messageToWriteToFile)
                 time.sleep(3)
-        except:
+        except Exception as ex:
             self.observer.stop()
-            print "Error"
+            print("Error in running File watcher")
+            print(ex)
 
         self.observer.join()
 
@@ -56,15 +59,16 @@ class Handler(FileSystemEventHandler):
 
         elif event.event_type == 'created':
             # Take any action here when a file is first created.
-            print "Received created event - %s." % event.src_path
+            print("Received created event - %s." % event.src_path)
 
         elif event.event_type == 'modified':
             # Taken any action here when a file is modified.
-            print "Received file modified event - %s." % event.src_path
+            print("Received file modified event - %s." % event.src_path)
             handleWriteToSerial()
 
     def handleWriteToSerial():
         # move the file object's position to the last set position
+        global filePosition
         serialLogsFile.seek(filePosition)
         
         # write to the Arduino Serial the next line in the file
@@ -75,37 +79,42 @@ class Handler(FileSystemEventHandler):
 
     def handleWriteToFile(message):
         serialLogsFile.write(message)
+        serialLogsFile.flush()
 
+        global filePosition
         filePosition = serialLogsFile.tell()
 
 # END------------------------------------
 
 
-if __name__ == "__main__":
-    
+def main() :
+    print("AR Interface started...")
     # configure the arduino serial channel
+
+    # TODO: parametrize the serial port so that it can be passed in from command line
     try:
+        global ser
         ser = serial.Serial('/dev/ttyACM0', 9600)
     
     except:
         print('arduino not available on /dev/ttyACM0')
-
-    else :
-        try:
-            ser = serial.Serial('/dev/ttyACM1', 9600)
-
-        except:
-            print('arduino not available on /dev/ttyACM1')
     
-    if ser == null:
+    if ser is None:
         print('arduino serial unavailable')
         return
 
-    ser.readline();
-    ser.readline();
+    print("Arduino available and connected")
+    ser.read_all()
 
     # open the text file for reading and writing
+    print("opening logs file")
+    global serialLogsFile
     serialLogsFile = open('./SerialLogger/serialLogs.txt', 'a+')
 
+    print("Starting file watcher")
     fileWatcher = Watcher()
     fileWatcher.run()
+
+
+if __name__ == "__main__":
+    main()

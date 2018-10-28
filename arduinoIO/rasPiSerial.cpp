@@ -17,7 +17,7 @@ void RasPiSerial::readSerial(String inMessage){
         );
 
     result->id = inMessage.substring(4,6).toInt();
-    result->messageBody = inMessage.substring(6);
+    result->messageBody = inMessage.substring(6, inMessage.length() - 2);
 
     messageQueue.push(result);
 }
