@@ -12,11 +12,16 @@ ser = None
 serialLogsFile = None
 filePosition = 0
 
-def serialRead() :
-    return ser.read_until("*")
+
+def serialRead():
+    print("serial reading: ")
+    messageRead = ser.read_all()
+    print(messageRead)
+    return messageRead.decode("utf8")
 
 
-def serialWrite(message) :
+def serialWrite(message):
+    print("serial writing")
     ser.write(bytes(message, "utf8"))
 
 
@@ -40,8 +45,11 @@ class Watcher:
                 print("entered Watcher loop, about to serial read")
                 messageToWriteToFile = serialRead()
                 print("finished serial reading")
-                event_handler.handleWriteToFile(messageToWriteToFile)
-                time.sleep(3)
+                print(messageToWriteToFile)
+                if messageToWriteToFile != "":
+                    print("writing to file")
+                    event_handler.handleWriteToFile(messageToWriteToFile)
+                time.sleep(2)
         except Exception as ex:
             self.observer.stop()
             print("Error in running File watcher")
@@ -51,6 +59,17 @@ class Watcher:
 
 
 class Handler(FileSystemEventHandler):
+
+    def handleWriteToSerial(self):
+        # move the file object's position to the last set position
+        global filePosition
+        serialLogsFile.seek(filePosition)
+        
+        # write to the Arduino Serial the next line in the file
+        serialWrite(serialLogsFile.readline())
+
+        # readjust the file position
+        filePosition = serialLogsFile.tell()
 
     @staticmethod
     def on_any_event(event):
@@ -64,20 +83,22 @@ class Handler(FileSystemEventHandler):
         elif event.event_type == 'modified':
             # Taken any action here when a file is modified.
             print("Received file modified event - %s." % event.src_path)
-            handleWriteToSerial()
+            
+            # move the file object's position to the last set position
+            global filePosition
+            serialLogsFile.seek(filePosition)
+            
+            # write to the Arduino Serial the next line in the file
+            messageToWriteToSerial = serialLogsFile.readline()
+            print("message to write to serial: ", messageToWriteToSerial)
+            if messageToWriteToSerial != '':
+                serialWrite(messageToWriteToSerial)
 
-    def handleWriteToSerial():
-        # move the file object's position to the last set position
-        global filePosition
-        serialLogsFile.seek(filePosition)
-        
-        # write to the Arduino Serial the next line in the file
-        serialWrite(serialLogsFile.readline())
+            # readjust the file position
+            filePosition = serialLogsFile.tell()
 
-        # readjust the file position
-        filePosition = serialLogsFile.tell()
 
-    def handleWriteToFile(message):
+    def handleWriteToFile(self, message):
         serialLogsFile.write(message)
         serialLogsFile.flush()
 
@@ -87,17 +108,17 @@ class Handler(FileSystemEventHandler):
 # END------------------------------------
 
 
-def main() :
+def main():
     print("AR Interface started...")
     # configure the arduino serial channel
 
     # TODO: parametrize the serial port so that it can be passed in from command line
     try:
         global ser
-        ser = serial.Serial('/dev/ttyACM0', 9600)
+        ser = serial.Serial('/dev/ttyACM1', 9600)
     
     except:
-        print('arduino not available on /dev/ttyACM0')
+        print('arduino not available on /dev/ttyACM1')
     
     if ser is None:
         print('arduino serial unavailable')

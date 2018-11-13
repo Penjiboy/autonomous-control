@@ -159,6 +159,8 @@ void delegateMessageResponsibility(RasPiMessage* message){
       if(message->iCode == ICode::SET){
         // set Motor power (percent)
         motor.setSpeed(message->messageBody.toFloat());
+        Serial.println(message->messageBody.toFloat());
+        Serial.println(message->messageBody);
       } else if(message->iCode == ICode::GET) {
         Serial.println("Shouldn't have to get Motor power (percent)");
       }

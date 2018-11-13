@@ -1,2 +1,8 @@
-
 $GET01*
+message received: $GET01*
+
+Getting GPS latitude not yet implemented, tempVal=25.0000
+$VAL0125.0000*
+$GET01*
+Getting GPS latitude not yet implemented, tempVal=25.0000
+$VAL0125.0000*

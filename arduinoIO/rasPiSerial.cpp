@@ -6,6 +6,7 @@ void RasPiSerial::readSerial(String inMessage){
     if(inMessage[0] != '$'){
         result->iCode = ERR;
         messageQueue.push(result);
+        return;
     }
 
     String newICode = inMessage.substring(1,4);
@@ -17,7 +18,7 @@ void RasPiSerial::readSerial(String inMessage){
         );
 
     result->id = inMessage.substring(4,6).toInt();
-    result->messageBody = inMessage.substring(6, inMessage.length() - 2);
+    result->messageBody = inMessage.substring(6, inMessage.length() - 1);
 
     messageQueue.push(result);
 }
