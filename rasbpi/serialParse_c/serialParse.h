@@ -77,6 +77,19 @@ public:
      */
     double getBatteryVoltage();
     
+    
+    /* getGpsHeading
+     * returns: the gps heading, value is signed double
+     * ID: 08
+     */
+    double getGpsHeading();
+    
+    /* getGpsSpeed
+     * returns: the gps speed, value is signed double
+     * ID: 09
+     */
+    double getGpsSpeed();
+    
     /* getRudderAngle
      * returns: the rudder angle, value is signed double
      * ID: 51
