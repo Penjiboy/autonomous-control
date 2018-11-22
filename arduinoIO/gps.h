@@ -4,13 +4,18 @@
 #include <Arduino.h>
 
 class GPS {
-	float latitude, longitude;
+	float _latitude, _longitude;
+	float _heading, _sog;
 public:
-  int parseNMEA(char[82] nmea);
+  void begin();
+  
+  int parseNMEA(char nmea[]);
   float getLatitude();
   float getLongitude();
+  float getHeading();
+  float getSOG();
 private:
   void debug(String msg);
-  void NMEAchecksum(char[] checksum);
+  int NMEAChecksum(char msg[]);
 };
 #endif
