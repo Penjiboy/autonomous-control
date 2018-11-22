@@ -1,18 +1,20 @@
 #include "motor.h"
 #include "rudder.h"
 #include "pins.h"
+#include "gps.h"
 
 #define GPSSERIAL Serial1
 
 Motor motor;
 Rudder rudder;
+GPS gps;
 
 // GPS code
 // =========================================
 
 char tmp;
 char NMEAbuf[82];
-char NMEAbuf = 0;
+char NMEAbuf_pointer = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -21,27 +23,35 @@ void setup() {
 
   motor.begin(MOTOR_ESC_PIN);
   rudder.begin(RUDDER_SERVO_PIN);
+  gps.begin();
 
   GPSSERIAL.begin(115200, SERIAL_8N1);
 
 }
 
 void loop() {
+  motor.setSpeed(1);
+  Serial.println("Motor on");
   delay(2500);
+  motor.setSpeed(0);
+  Serial.println("Motor off");
+  delay(1000);
+  rudder.setAngle(25);
+  Serial.println("Rudder angle +10 degrees");
+  delay(1000);
+  rudder.setAngle(-25);
+  Serial.println("Rudder angle -10 degrees");
+  delay(1000);
+  rudder.setAngle(0);
 }
 
 void serialEvent1() {
   while(GPSSERIAL.available()) {
-    if(NMEAbuf[NMEAbuf_pointer++] = GPSSERIAL.read())
-      parseNMEA();
-  }
-}
-
-void parseNMEA(char nmea[82]) {
-  sscanf(NMEAbuf, "%[$!]%2s%3s%*[^*]*%2x", start_delimiter, message_talker, message_id, checksum);
-
-  switch(message_id) {
-    case "GLL": sscanf(NMEAbuf, "$GPGLL%lf,%c,%lf,%c,%2i%2i%5f,%*[AV],%c*%x",); break; //read NMEA 0183 GLL string
-    default:
+    if((NMEAbuf[NMEAbuf_pointer++] = GPSSERIAL.read()) == '\n') {
+      Serial.print("Message: ");
+      Serial.println(NMEAbuf);
+      gps.parseNMEA(NMEAbuf);
+      NMEAbuf_pointer = 0;
+    }
   }
 }
