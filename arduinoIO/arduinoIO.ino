@@ -2,20 +2,20 @@
 #include "rudder.h"
 #include "pins.h"
 #include "rasPiSerial.h"
+#include "gps.h"
 
 //#define GPSSERIAL Serial1
 
 Motor motor;
 Rudder rudder;
+GPS gps;
 
 // GPS code
 // =========================================
 
 char tmp;
 char NMEAbuf[82];
-//char NMEAbuf = 0;
-
-RasPiSerial* rasPiSerialInstance;
+char NMEAbuf_pointer = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -26,6 +26,7 @@ void setup() {
 
   motor.begin(MOTOR_ESC_PIN);
   rudder.begin(RUDDER_SERVO_PIN);
+  gps.begin();
 
    Serial.println("Components setup");
    Serial.clear();
@@ -43,10 +44,13 @@ void loop() {
 }
 
 void serialEvent1() {
-  // while(GPSSERIAL.available()) {
-  //   if(NMEAbuf[NMEAbuf_pointer++] = GPSSERIAL.read())
-  //     parseNMEA();
-  // }
+  while(GPSSERIAL.available()) {
+    if((NMEAbuf[NMEAbuf_pointer++] = GPSSERIAL.read()) == '\n') {
+      Serial.print("Message: ");
+      Serial.println(NMEAbuf);
+      gps.parseNMEA(NMEAbuf);
+      NMEAbuf_pointer = 0;
+    }
 }
 
 void serialEvent() {
@@ -56,15 +60,6 @@ void serialEvent() {
   }
   
   Serial.clear();
-}
-
-void parseNMEA() {
-  // sscanf(NMEAbuf, "%[$!]%2s%3s%*[^*]*%2x", start_delimiter, message_talker, message_id, checksum);
-
-  // switch(message_id) {
-  //   case "GLL": sscanf(NMEAbuf, "$GPGLL%lf,%c,%lf,%c,%2i%2i%5f,%*[AV],%c*%x",); break; //read NMEA 0183 GLL string
-  //   default:
-  // }
 }
 
 /**
@@ -88,8 +83,8 @@ void delegateMessageResponsibility(RasPiMessage* message){
         Serial.println("Cannot set GPS Latitude");
       } else if(message->iCode == ICode::GET) {
         // get GPS latitude
-        Serial.println("Getting GPS latitude not yet implemented, tempVal=25.0000");
-        outMessage = rasPiSerialInstance->buildOutMessage(ICode::VAL, 1, "25.0000");
+        float latitude = gps.getLatitude();
+        outMessage = rasPiSerialInstance->buildOutMessage(ICode::VAL, 1, String(latitude));
         Serial.println(outMessage);
       }
       break;
@@ -100,8 +95,8 @@ void delegateMessageResponsibility(RasPiMessage* message){
         Serial.println("Cannot set longitude");
       } else if(message->iCode == ICode::GET) {
           // get GPS longitude
-        Serial.println("Getting GPS longitude not yet implemented, tempVal=50.0000");
-        outMessage = rasPiSerialInstance->buildOutMessage(ICode::VAL, 2, "50.0000");
+        float longitude = gps.getLongitude();
+        outMessage = rasPiSerialInstance->buildOutMessage(ICode::VAL, 2, String(longitude));
         Serial.println(outMessage);
       }
       break;
@@ -159,8 +154,6 @@ void delegateMessageResponsibility(RasPiMessage* message){
       if(message->iCode == ICode::SET){
         // set Motor power (percent)
         motor.setSpeed(message->messageBody.toFloat());
-        Serial.println(message->messageBody.toFloat());
-        Serial.println(message->messageBody);
       } else if(message->iCode == ICode::GET) {
         Serial.println("Shouldn't have to get Motor power (percent)");
       }
