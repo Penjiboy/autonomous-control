@@ -4,7 +4,7 @@
 #include "rasPiSerial.h"
 #include "gps.h"
 
-//#define GPSSERIAL Serial1
+#define GPSSERIAL Serial1
 
 Motor motor;
 Rudder rudder;
@@ -16,60 +16,17 @@ GPS gps;
 char tmp;
 char NMEAbuf[82];
 char NMEAbuf_pointer = 0;
+RasPiSerial rasPiSerialInstance;
 
-void setup() {
-  Serial.begin(9600);
-  delay(1000);
-  Serial.println("Starting...");
-
-  rasPiSerialInstance = new RasPiSerial();
-
-  motor.begin(MOTOR_ESC_PIN);
-  rudder.begin(RUDDER_SERVO_PIN);
-  gps.begin();
-
-   Serial.println("Components setup");
-   Serial.clear();
-   
-
-  //GPSSERIAL.begin(115200, SERIAL_8N1);
-
-}
-
-void loop() {
-  if(!rasPiSerialInstance->messageQueue.isEmpty()){
-    delegateMessageResponsibility(rasPiSerialInstance->messageQueue.front());
-  }
-  delay(1500);
-}
-
-void serialEvent1() {
-  while(GPSSERIAL.available()) {
-    if((NMEAbuf[NMEAbuf_pointer++] = GPSSERIAL.read()) == '\n') {
-      Serial.print("Message: ");
-      Serial.println(NMEAbuf);
-      gps.parseNMEA(NMEAbuf);
-      NMEAbuf_pointer = 0;
-    }
-}
-
-void serialEvent() {
-  
-  if(Serial.available()) {
-    rasPiSerialInstance->readSerial(Serial.readString());
-  }
-  
-  Serial.clear();
-}
 
 /**
  * Depending on the message contents, delegate responsibility
  * to the appropriate part of the system
  */
-void delegateMessageResponsibility(RasPiMessage* message){  
+void delegateMessageResponsibility(RasPiMessage* message) {
   if(message->iCode == ICode::ERR){
     Serial.println("$ERR0RinInputMessage*");
-    rasPiSerialInstance->messageQueue.pop();
+    rasPiSerialInstance.messageQueue.pop();
     delete(message);
     return;
   }
@@ -84,7 +41,7 @@ void delegateMessageResponsibility(RasPiMessage* message){
       } else if(message->iCode == ICode::GET) {
         // get GPS latitude
         float latitude = gps.getLatitude();
-        outMessage = rasPiSerialInstance->buildOutMessage(ICode::VAL, 1, String(latitude));
+        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, 1, String(latitude));
         Serial.println(outMessage);
       }
       break;
@@ -96,7 +53,7 @@ void delegateMessageResponsibility(RasPiMessage* message){
       } else if(message->iCode == ICode::GET) {
           // get GPS longitude
         float longitude = gps.getLongitude();
-        outMessage = rasPiSerialInstance->buildOutMessage(ICode::VAL, 2, String(longitude));
+        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, 2, String(longitude));
         Serial.println(outMessage);
       }
       break;
@@ -108,7 +65,7 @@ void delegateMessageResponsibility(RasPiMessage* message){
       } else if(message->iCode == ICode::GET) {
           // get Motor power (Watts)
         Serial.println("Getting Motor power (Watts) not yet implemented, tempVal=5");
-        outMessage = rasPiSerialInstance->buildOutMessage(ICode::VAL, 3, "5");
+        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, 3, "5");
         Serial.println(outMessage);
       }
       break;
@@ -120,7 +77,7 @@ void delegateMessageResponsibility(RasPiMessage* message){
       } else if(message->iCode == ICode::GET) {
           // get Battery level (percent)
         Serial.println("Getting Battery level (percent) not yet implemented, tempVal=65");
-        outMessage = rasPiSerialInstance->buildOutMessage(ICode::VAL, 4, "65");
+        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, 4, "65");
         Serial.println(outMessage);
       }
       break;
@@ -132,7 +89,7 @@ void delegateMessageResponsibility(RasPiMessage* message){
       } else if(message->iCode == ICode::GET) {
           // get Motor temperature (Kelvin)
         Serial.println("Getting Motor temperature (Kelvin) not yet implemented, tempVal=130");
-        outMessage = rasPiSerialInstance->buildOutMessage(ICode::VAL, 5, "130");
+        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, 5, "130");
         Serial.println(outMessage);
       }
       break;
@@ -144,7 +101,7 @@ void delegateMessageResponsibility(RasPiMessage* message){
       } else if(message->iCode == ICode::GET) {
           // get Battery voltage
         Serial.println("Getting Battery voltage not yet implemented, tempVal=3.3");
-        outMessage = rasPiSerialInstance->buildOutMessage(ICode::VAL, 6, "3.3");
+        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, 6, "3.3");
         Serial.println(outMessage);
       }
       break;
@@ -175,6 +132,51 @@ void delegateMessageResponsibility(RasPiMessage* message){
   }
 
   // dequeue the message from the queue and free the memory assigned to the message
-  rasPiSerialInstance->messageQueue.pop();
+  rasPiSerialInstance.messageQueue.pop();
   delete(message);
+}
+
+void setup() {
+  Serial.begin(9600);
+  delay(1000);
+  Serial.println("Starting...");
+
+
+  motor.begin(MOTOR_ESC_PIN);
+  rudder.begin(RUDDER_SERVO_PIN);
+  gps.begin();
+
+   Serial.println("Components setup");
+   Serial.clear();
+
+
+  //GPSSERIAL.begin(115200, SERIAL_8N1);
+
+}
+
+void loop() {
+  if(!rasPiSerialInstance.messageQueue.isEmpty()){
+    delegateMessageResponsibility(rasPiSerialInstance.messageQueue.front());
+  }
+  delay(1500);
+}
+
+void serialEvent() {
+
+  if(Serial.available()) {
+    rasPiSerialInstance.readSerial(Serial.readString());
+  }
+
+  Serial.clear();
+}
+
+void serialEvent1() {
+  while(GPSSERIAL.available()) {
+	  if((NMEAbuf[NMEAbuf_pointer++] = GPSSERIAL.read()) == '\n') {
+		 Serial.print("Message: ");
+		 Serial.println(NMEAbuf);
+		 gps.parseNMEA(NMEAbuf);
+		 NMEAbuf_pointer = 0;
+	  }
+  }
 }
