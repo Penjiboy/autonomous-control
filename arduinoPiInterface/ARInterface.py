@@ -5,18 +5,19 @@
 
 import serial
 import time
+import sys
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 ser = None
 serialLogsFile = None
+serialLogsFileName = ""
+serialPort = None
 filePosition = 0
 
 
 def serialRead():
-    print("serial reading: ")
     messageRead = ser.read_all()
-    print(messageRead)
     return messageRead.decode("utf8")
 
 
@@ -42,10 +43,7 @@ class Watcher:
         self.observer.start()
         try:
             while True:
-                print("entered Watcher loop, about to serial read")
                 messageToWriteToFile = serialRead()
-                print("finished serial reading")
-                print(messageToWriteToFile)
                 if messageToWriteToFile != "":
                     print("writing to file")
                     event_handler.handleWriteToFile(messageToWriteToFile)
@@ -113,12 +111,42 @@ def main():
     # configure the arduino serial channel
 
     # TODO: parametrize the serial port so that it can be passed in from command line
-    try:
+    if serialPort is not None:
         global ser
-        ser = serial.Serial('/dev/ttyACM1', 9600)
-    
-    except:
-        print('arduino not available on /dev/ttyACM1')
+        ser = serial.Serial(serialPort, 9600)
+
+    else :
+
+        try:
+            #global ser
+            ser = serial.Serial('/dev/ttyACM0', 9600)
+        
+        except:
+            print('arduino not available on /dev/ttyACM0')
+            
+        if ser is None:
+            try:
+                #global ser
+                ser = serial.Serial('/dev/ttyACM1', 9600)
+
+            except:
+                print('arduino not available on /dev/ttyACM1')
+
+        if ser is None:
+            try:
+                #global ser
+                ser = serial.Serial('/dev/ttyACM2', 9600)
+
+            except:
+                print('arduino not available on /dev/ttyACM2')
+
+        if ser is None:
+            try:
+                #global ser
+                ser = serial.Serial('/dev/ttyACM3', 9600)
+
+            except:
+                print('arduino not available on /dev/ttyACM3')
     
     if ser is None:
         print('arduino serial unavailable')
@@ -130,7 +158,10 @@ def main():
     # open the text file for reading and writing
     print("opening logs file")
     global serialLogsFile
-    serialLogsFile = open('./SerialLogger/serialLogs.txt', 'a+')
+    if serialLogsFileName == "":
+        serialLogsFile = open('./SerialLogger/serialLogs.txt', 'a+')
+    else:
+        serialLogsFile = open(serialLogsFileName, 'a+')
 
     print("Starting file watcher")
     fileWatcher = Watcher()
@@ -138,4 +169,13 @@ def main():
 
 
 if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        #global serialLogsFileName
+        serialLogsFileName = sys.argv[1]
+        print(str(sys.argv))
+
+    if len(sys.argv) == 3:
+        #global serialPort
+        serialPort = sys.argv[2]
+
     main()
