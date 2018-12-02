@@ -55,7 +55,7 @@ public:
     double getBoatPower();
     
     /* setMotorPower
-     * ID: 03
+     * ID: 50
      */
     void setMotorPower(double percent);
     

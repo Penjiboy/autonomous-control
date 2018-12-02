@@ -10,14 +10,43 @@
 #include <iostream>
 
 int main(int argc, const char * argv[]) {
+    int temp1;
+    double temp2;
+    
     SerialParse serial;
     serial.setRpm(10);
-    //serial.setLatitude(100);
-    //serial.setLongitude(10);
-    serial.setMotorPower(51);
-    serial.setRudderAngle(120);
+    serial.setMotorPower(0.5);
+    serial.setRudderAngle(20.1);
     //std::cout<<serial.getRpm();
-    std::cout<<serial.getLatitude()<<std::endl;
+    
+    temp2 = serial.getLatitude();
+    std::cout<<"latitude value is: "<< temp2 << std::endl;
+    
+    temp2 = serial.getLongitude();
+    std::cout<<"longitude value is: "<< temp2 << std::endl;
+    
+    temp1 = serial.getRpm();
+    std::cout<<"rpme value is: "<< temp1 << std::endl;
+    
+    temp2 = serial.getBoatPower();
+    std::cout<<"motor power is: "<< temp2 << std::endl;
+    
+    temp2 = serial.getBatteryLevel();
+    std::cout<<"battery level is: "<< temp2 << std::endl;
+    
+    temp2 = serial.getMotorTemperature();
+    std::cout<<"motor temperature is: "<< temp2 << std::endl;
+    
+    temp2 = serial.getBatteryVoltage();
+    std::cout<<"battery voltage is: "<< temp2 << std::endl;
+    
+    temp2 = serial.getGpsHeading();
+    std::cout<<"gps heading is: "<< temp2 << std::endl;
+    
+    temp2 = serial.getGpsSpeed();
+    std::cout<<"gps speed is: "<< temp2 << std::endl;
+    
+    
     
     return 0;
 }
