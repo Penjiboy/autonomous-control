@@ -77,19 +77,6 @@ public:
      */
     double getBatteryVoltage();
     
-    
-    /* getGpsHeading
-     * returns: the gps heading, value is signed double
-     * ID: 08
-     */
-    double getGpsHeading();
-    
-    /* getGpsSpeed
-     * returns: the gps speed, value is signed double
-     * ID: 09
-     */
-    double getGpsSpeed();
-    
     /* getRudderAngle
      * returns: the rudder angle, value is signed double
      * ID: 51
@@ -104,19 +91,10 @@ public:
     
 private:
     
-    bool serialDoneInit;
-    int serialFd;
-    //For mac
-    //const char* portName = "/dev/cu.usbmodem4697410";
-    //For Raspberry Pi 3
-    const char* portName = "/dev/ttyACM0";
-    const int baudrate = 9600;
-    
-    
     /*
      * write the message to the file
      */
-    void sendMessage(std::string & message);
+    static void sendMessage(std::string & message);
 
     
     /*
@@ -125,7 +103,7 @@ private:
      * return: true if value false otherwise
      * returnArg: the argument extracted from the line of code
      */
-    bool receiveMessage(std::string &returnArg);
+    static bool receiveMessage(std::string &returnArg);
 };
 
 #endif
