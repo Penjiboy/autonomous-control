@@ -91,7 +91,7 @@ double SerialParse::getLongitude(){
 }
 
 
-double SerialParse::getMotorPower(){
+double SerialParse::getBoatPower(){
     std::string message = "$GET03*";
     
     std::string returnArg;
@@ -114,10 +114,10 @@ double SerialParse::getMotorPower(){
 
 
 
-void SerialParse::setMotorPower(double watt){
-    std::string message = "$SET03";
+void SerialParse::setMotorPower(double percent){
+    std::string message = "$SET50";
     stringstream stream;
-    stream << fixed << setprecision(2) << watt;
+    stream << fixed << setprecision(2) << percent;
     
     message = message + stream.str() + "*";
     sendMessage(message);
@@ -195,26 +195,26 @@ double SerialParse::getBatteryVoltage(){
 
 
 
-double SerialParse::getRudderAngle(){
-    std::string message = "$GET51*";
-    
-    std::string returnArg;
-    
-    sendMessage(message);
-    
-    //keep looping until a response is retrieved from the arduino
-    while(!receiveMessage(returnArg)){
-        
-    }
-    
-    //check the ID
-    if(returnArg.substr(0, 2) == "51"){
-        int msglen = (int)returnArg.length();
-        return atof(returnArg.substr(2, msglen - 2).c_str());
-    }
-    
-    return -1;
-}
+//double SerialParse::getRudderAngle(){
+//    std::string message = "$GET51*";
+//
+//    std::string returnArg;
+//
+//    sendMessage(message);
+//
+//    //keep looping until a response is retrieved from the arduino
+//    while(!receiveMessage(returnArg)){
+//
+//    }
+//
+//    //check the ID
+//    if(returnArg.substr(0, 2) == "51"){
+//        int msglen = (int)returnArg.length();
+//        return atof(returnArg.substr(2, msglen - 2).c_str());
+//    }
+//
+//    return -1;
+//}
 
 
 
@@ -280,7 +280,7 @@ void SerialParse::sendMessage(std::string & message){
     }
     cout << "serial opened, fd: " << serialFd << endl;
     
-    
+    message.append("\n");
     serialPuts(serialFd, message.c_str());
 }
 

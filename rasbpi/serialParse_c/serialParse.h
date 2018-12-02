@@ -52,12 +52,12 @@ public:
      * returns: the message that can be used to get the motor power
      * ID: 03
      */
-    double getMotorPower();
+    double getBoatPower();
     
     /* setMotorPower
      * ID: 03
      */
-    void setMotorPower(double watt);
+    void setMotorPower(double percent);
     
     /* getBatteryLevel
      * returns: the battery level
