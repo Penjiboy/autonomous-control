@@ -18,6 +18,7 @@ GPS gps;
 char tmp;
 char NMEAbuf[82];
 int NMEAbuf_pointer = 0;
+int rc_timeout;
 RasPiSerial rasPiSerialInstance;
 PulsePositionInput rc;
 IntervalTimer RCTimer;
@@ -187,13 +188,24 @@ void delegateMessageResponsibility(RasPiMessage* message) {
 }
 
 void updateControl() {
+  rc_timeout++;
 	int endChannel;
-	if(endChannel = rc.available()) {
+	if((endChannel = rc.available()) > 0) {
+    rc_timeout = 0;
+    
 		if(rc.read(MANUAL_OVERRIDE_CHANNEL) > 1500) {
 			motor.setPeriod(rc.read(MOTOR_CHANNEL));
 			rudder.setPeriod(rc.read(RUDDER_CHANNEL));
+		} else { //if in autonomous mode release motor and rudder from manual control
+      motor.releasePeriod();
+      rudder.releasePeriod();
 		}
+   
 		rc.read(endChannel); //clear ppm buffer until next frame comes in.
+    
+	} else if(rc_timeout > 50) { //if rc reception is timed out return control to autonomous
+    motor.releasePeriod();
+    rudder.releasePeriod();
 	}
 }
 

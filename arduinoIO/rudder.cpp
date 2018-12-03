@@ -10,6 +10,7 @@
 
 void Rudder::begin(int pin) {
 	debug("Initializing Rudder Servo.");
+  period_override_ = 0;
 	rudder_servo_.attach(pin);
 	setAngle(0);
 }
@@ -18,11 +19,17 @@ void Rudder::setAngle(float angle) {
 	//confine rudder angle to max range
 	angle_ = angle > RUDDER_ANGLE_MAX ? RUDDER_ANGLE_MAX : (angle < -RUDDER_ANGLE_MAX ? -RUDDER_ANGLE_MAX : angle);
 	calculatePeriod();
-	setPeriod(rudder_servo_period_);
+	if(!period_override_) rudder_servo_.writeMicroseconds(rudder_servo_period_);
 }
 
 void Rudder::setPeriod(int period) {
 	rudder_servo_.writeMicroseconds(period);
+  period_override_ = 1;
+}
+
+void Rudder::releasePeriod() {
+  period_override_ = 0;
+  rudder_servo_.writeMicroseconds(rudder_servo_period_);
 }
 
 float Rudder::getAngle() {
