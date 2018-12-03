@@ -20,20 +20,18 @@ int GPS::parseNMEA(char nmea[]) {
   float second;
   char valid[1];
 
-  Serial.println(nmea);
-
   sscanf(nmea, "%[$!]%5s,%[^*]*%2x", start_delimiter, message_handle, args, &checksum);
 
   if(!strncmp(message_handle, "GPGLL", 5)) {
     sscanf(args, "%2i%f,%c,%3i%f,%c,%2i%2i%5f,%[AV],%*c", &lat_base, &_latitude, &north, &long_base, &_longitude, &east, &hour, &minute, &second, valid);
-    
+
     _latitude = (_latitude / 60.0) + lat_base;
     if(north == 'S') {
       _latitude *= -1;
     } else if(north != 'N') {
       return -1;
     }
-    
+
     _longitude = (_longitude / 60.0) + long_base;
     if(east == 'W') {
       _longitude *= -1;
@@ -43,7 +41,6 @@ int GPS::parseNMEA(char nmea[]) {
   } else if(!strncmp(message_handle, "GPVTG", 5)) {
     sscanf(args, "%f,%*c,%*f,%*c,%*f,%*c,%f,%*c,%*c", &_heading, &_sog);
   }
-  Serial.println(_latitude, 6);
   return 0;
 }
 
