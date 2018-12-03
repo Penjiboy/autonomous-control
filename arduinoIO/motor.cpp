@@ -1,7 +1,7 @@
 #include "motor.h"
 
-#define MOTOR_PERIOD_NEUTRAL 1500
-#define MOTOR_PERIOD_RANGE 1000
+#define MOTOR_PERIOD_NEUTRAL 1000
+#define MOTOR_PERIOD_RANGE 2000
 
 void Motor::begin(int pin) {
 	debug("Initializing Motor.");
