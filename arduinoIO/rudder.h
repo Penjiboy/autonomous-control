@@ -8,11 +8,14 @@
 class Rudder {
 	float angle_;
 	int rudder_servo_period_;
+  int period_override_;
 	Servo rudder_servo_;
 public:
   void begin(int pin);
 
   void setAngle(float angle);
+  void setPeriod(int period);
+  void releasePeriod();
   float getAngle();
 private:
   void debug(String msg);

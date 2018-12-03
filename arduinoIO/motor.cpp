@@ -5,6 +5,7 @@
 
 void Motor::begin(int pin) {
 	debug("Initializing Motor.");
+  period_override_ = 0;
 	esc_.attach(pin);
 	setSpeed(0);
 }
@@ -12,7 +13,17 @@ void Motor::begin(int pin) {
 void Motor::setSpeed(float speed) {
 	speed_ = speed > 1 ? 1 : (speed < -1 ? -1 : speed);
 	calculatePeriod();
-	esc_.writeMicroseconds(esc_period_);
+	if(!period_override_) esc_.writeMicroseconds(esc_period_);
+}
+
+void Motor::setPeriod(int period) {
+	esc_.writeMicroseconds(period);
+  period_override_ = 1;
+}
+
+void Motor::releasePeriod() {
+  period_override_ = 0;
+  esc_.writeMicroseconds(esc_period_);
 }
 
 float Motor::getSpeed() {

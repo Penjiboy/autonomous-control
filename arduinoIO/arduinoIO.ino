@@ -4,6 +4,8 @@
 #include "rasPiSerial.h"
 #include "gps.h"
 
+#include <PulsePosition.h>
+
 #define GPSSERIAL Serial1
 
 Motor motor;
@@ -16,7 +18,10 @@ GPS gps;
 char tmp;
 char NMEAbuf[82];
 int NMEAbuf_pointer = 0;
+int rc_timeout;
 RasPiSerial rasPiSerialInstance;
+PulsePositionInput rc;
+IntervalTimer RCTimer;
 
 
 /**
@@ -182,19 +187,42 @@ void delegateMessageResponsibility(RasPiMessage* message) {
   delete(message);
 }
 
+void updateControl() {
+  rc_timeout++;
+	int endChannel;
+	if((endChannel = rc.available()) > 0) {
+    rc_timeout = 0;
+    
+		if(rc.read(MANUAL_OVERRIDE_CHANNEL) > 1500) {
+			motor.setPeriod(rc.read(MOTOR_CHANNEL));
+			rudder.setPeriod(rc.read(RUDDER_CHANNEL));
+		} else { //if in autonomous mode release motor and rudder from manual control
+      motor.releasePeriod();
+      rudder.releasePeriod();
+		}
+   
+		rc.read(endChannel); //clear ppm buffer until next frame comes in.
+    
+	} else if(rc_timeout > 50) { //if rc reception is timed out return control to autonomous
+    motor.releasePeriod();
+    rudder.releasePeriod();
+	}
+}
+
 void setup() {
   Serial.begin(9600);
   delay(1000);
   Serial.println("Starting...");
 
-
+  rc.begin(INPUT_PPM_PIN);
   motor.begin(MOTOR_ESC_PIN);
   rudder.begin(RUDDER_SERVO_PIN);
   gps.begin();
 
+  RCTimer.begin(updateControl, 1000*15);
+
   Serial.println("Components setup");
   Serial.clear();
-
 
   GPSSERIAL.begin(115200, SERIAL_8N1);
 

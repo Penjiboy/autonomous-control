@@ -10,7 +10,6 @@ void GPS::begin() {
 int GPS::parseNMEA(char nmea[]) {
 	char start_delimiter[1];
 	char message_handle[6];
-	char message_id[3];
 	char args[82];
 	int checksum;
 
