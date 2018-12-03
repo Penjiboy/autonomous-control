@@ -14,30 +14,37 @@ int GPS::parseNMEA(char nmea[]) {
 	char args[82];
 	int checksum;
 
-	char north, east;
-	int hour, minute;
-	float second;
-	char valid[1];
+	int lat_base, long_base;
+  char north, east;
+  int hour, minute;
+  float second;
+  char valid[1];
 
-	sscanf(nmea, "%[$!]%5s,%[^*]*%2x", start_delimiter, message_handle, args, &checksum);
+  Serial.println(nmea);
 
-	if(!strncmp(message_handle, "GPGLL", 5)) {
-		sscanf(args, "%lf,%c,%lf,%c,%2i%2i%5f,%[AV],%*c", &_latitude, &north, &_longitude, &east, &hour, &minute, &second, valid);
+  sscanf(nmea, "%[$!]%5s,%[^*]*%2x", start_delimiter, message_handle, args, &checksum);
 
-			if(north == 'S') {
-				_latitude *= -1;
-			} else if(north != 'N') {
-				//invalid data
-			}
-
-			if(east == 'W') {
-				_longitude *= -1;
-			} else if(east != 'E') {
-				//invalid data
-			}
-	} else if(!strncmp(message_handle, "GPVTG", 5)) {
-		sscanf(args, "%lf,%*c,%*lf,%*c,%*lf,%*c,%lf,%*c,%*c", &_heading, &_sog);
-	}
+  if(!strncmp(message_handle, "GPGLL", 5)) {
+    sscanf(args, "%2i%f,%c,%3i%f,%c,%2i%2i%5f,%[AV],%*c", &lat_base, &_latitude, &north, &long_base, &_longitude, &east, &hour, &minute, &second, valid);
+    
+    _latitude = (_latitude / 60.0) + lat_base;
+    if(north == 'S') {
+      _latitude *= -1;
+    } else if(north != 'N') {
+      return -1;
+    }
+    
+    _longitude = (_longitude / 60.0) + long_base;
+    if(east == 'W') {
+      _longitude *= -1;
+    } else if(east != 'E') {
+      return -1;
+    }
+  } else if(!strncmp(message_handle, "GPVTG", 5)) {
+    sscanf(args, "%f,%*c,%*f,%*c,%*f,%*c,%f,%*c,%*c", &_heading, &_sog);
+  }
+  Serial.println(_latitude, 6);
+  return 0;
 }
 
 float GPS::getLongitude() {
@@ -57,5 +64,5 @@ float GPS::getSOG() {
 }
 
 int GPS::NMEAChecksum(char msg[]) {
-
+  return 0;
 }

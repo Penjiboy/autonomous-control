@@ -15,7 +15,7 @@ GPS gps;
 
 char tmp;
 char NMEAbuf[82];
-char NMEAbuf_pointer = 0;
+int NMEAbuf_pointer = 0;
 RasPiSerial rasPiSerialInstance;
 
 
@@ -192,11 +192,11 @@ void setup() {
   rudder.begin(RUDDER_SERVO_PIN);
   gps.begin();
 
-   Serial.println("Components setup");
-   Serial.clear();
+  Serial.println("Components setup");
+  Serial.clear();
 
 
-  //GPSSERIAL.begin(115200, SERIAL_8N1);
+  GPSSERIAL.begin(115200, SERIAL_8N1);
 
 }
 
@@ -219,8 +219,7 @@ void serialEvent() {
 void serialEvent1() {
   while(GPSSERIAL.available()) {
 	  if((NMEAbuf[NMEAbuf_pointer++] = GPSSERIAL.read()) == '\n') {
-		 Serial.print("Message: ");
-		 Serial.println(NMEAbuf);
+      NMEAbuf[NMEAbuf_pointer] = '\0';
 		 gps.parseNMEA(NMEAbuf);
 		 NMEAbuf_pointer = 0;
 	  }
