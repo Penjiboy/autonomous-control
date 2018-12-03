@@ -37,7 +37,8 @@ void delegateMessageResponsibility(RasPiMessage* message) {
 
     case GPS_LATITUDE_ID: {
       if(message->iCode == ICode::SET){
-        Serial.println("Cannot set GPS Latitude");
+          outMessage = rasPiSerialInstance.buildOutMessage(ICode::ERR, GPS_LATITUDE_ID, "NA");
+          Serial.println(outMessage);
       } else if(message->iCode == ICode::GET) {
         // get GPS latitude
         float latitude = gps.getLatitude();
@@ -49,7 +50,8 @@ void delegateMessageResponsibility(RasPiMessage* message) {
 
     case GPS_LONGITUDE_ID: {
       if(message->iCode == ICode::SET){
-        Serial.println("Cannot set longitude");
+          outMessage = rasPiSerialInstance.buildOutMessage(ICode::ERR, GPS_LONGITUDE_ID, "NA");
+          Serial.println(outMessage);
       } else if(message->iCode == ICode::GET) {
           // get GPS longitude
         float longitude = gps.getLongitude();
@@ -61,11 +63,11 @@ void delegateMessageResponsibility(RasPiMessage* message) {
 
     case BOAT_POWER_ID: {
       if(message->iCode == ICode::SET){
-        Serial.println("Can't set boat power (watts)");
+          outMessage = rasPiSerialInstance.buildOutMessage(ICode::ERR, BOAT_POWER_ID, "NA");
+          Serial.println(outMessage);
       } else if(message->iCode == ICode::GET) {
           // get boat power (Watts)
-        Serial.println("Getting Motor power (Watts) not yet implemented, tempVal=5");
-        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, BOAT_POWER_ID, "5");
+        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, BOAT_POWER_ID, "NA");
         Serial.println(outMessage);
       }
       break;
@@ -73,11 +75,12 @@ void delegateMessageResponsibility(RasPiMessage* message) {
 
     case BATTERY_LEVEL_ID: {
       if(message->iCode == ICode::SET){
-        Serial.println("Can't set Battery level (percent)");
+        outMessage = rasPiSerialInstance.buildOutMessage(ICode::ERR, BATTERY_LEVEL_ID, "NA");
+        Serial.println(outMessage);
       } else if(message->iCode == ICode::GET) {
           // get Battery level (percent)
-        Serial.println("Getting Battery level (percent) not yet implemented, tempVal=65");
-        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, BATTERY_LEVEL_ID, "65");
+        // not yet implemented
+        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, BATTERY_LEVEL_ID, "NA");
         Serial.println(outMessage);
       }
       break;
@@ -85,11 +88,11 @@ void delegateMessageResponsibility(RasPiMessage* message) {
 
     case MOTOR_TEMPERATURE_ID: {
       if(message->iCode == ICode::SET){
-        Serial.println("Can't set Motor temperature (Kelvin)");
+          outMessage = rasPiSerialInstance.buildOutMessage(ICode::ERR, MOTOR_TEMPERATURE_ID, "NA");
+          Serial.println(outMessage);
       } else if(message->iCode == ICode::GET) {
           // get Motor temperature (Kelvin)
-        Serial.println("Getting Motor temperature (Kelvin) not yet implemented, tempVal=130");
-        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, MOTOR_TEMPERATURE_ID, "130");
+        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, MOTOR_TEMPERATURE_ID, "NA");
         Serial.println(outMessage);
       }
       break;
@@ -97,11 +100,11 @@ void delegateMessageResponsibility(RasPiMessage* message) {
 
     case BATTERY_VOLTAGE_ID: {
       if(message->iCode == ICode::SET){
-        Serial.println("Can't set Battery volatage");
+          outMessage = rasPiSerialInstance.buildOutMessage(ICode::ERR, BATTERY_VOLTAGE_ID, "NA");
+          Serial.println(outMessage);
       } else if(message->iCode == ICode::GET) {
           // get Battery voltage
-        Serial.println("Getting Battery voltage not yet implemented, tempVal=3.3");
-        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, BATTERY_VOLTAGE_ID, "3.3");
+        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, BATTERY_VOLTAGE_ID, "NA");
         Serial.println(outMessage);
       }
       break;
@@ -112,7 +115,8 @@ void delegateMessageResponsibility(RasPiMessage* message) {
         // set Motor power (percent)
         motor.setSpeed(message->messageBody.toFloat());
       } else if(message->iCode == ICode::GET) {
-        Serial.println("Shouldn't have to get Motor power (percent)");
+          outMessage = rasPiSerialInstance.buildOutMessage(ICode::ERR, MOTOR_POWER_PERCENT_ID, "NA");
+          Serial.println(outMessage);
       }
       break;
     }
@@ -123,19 +127,20 @@ void delegateMessageResponsibility(RasPiMessage* message) {
         float angle = message->messageBody.toFloat();
         rudder.setAngle(angle);
       } else if(message->iCode == ICode::GET) {
-        Serial.println("Shouldn't have to get Rudder angle (degrees)");
+          outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, RUDDER_ANGLE_ID, "NA");
+          Serial.println(outMessage);
       }
       break;
     }
 
     case RPM_ID: {
         if (message->iCode == ICode::SET) {
-            Serial.println("Setting RPM not yet implemented");
+            outMessage = rasPiSerialInstance.buildOutMessage(ICode::ERR, RPM_ID, "NA");
+            Serial.println(outMessage);
 
         } else if (message->iCode == ICode::GET) {
             // get RPM
-            Serial.println("Getting RPM not yet implemented, tempVal=50");
-            outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, RPM_ID, "50");
+            outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, RPM_ID, "NA");
             Serial.println(outMessage);
         }
         break;
@@ -143,7 +148,8 @@ void delegateMessageResponsibility(RasPiMessage* message) {
 
     case GPS_HEADING_ID: {
         if (message->iCode == ICode::SET) {
-            Serial.println("Shouldn't have to set GPS heading");
+            outMessage = rasPiSerialInstance.buildOutMessage(ICode::ERR, GPS_HEADING_ID, "NA");
+            Serial.println(outMessage);
 
         } else if (message->iCode == ICode::GET) {
             // get GPS heading
@@ -156,7 +162,8 @@ void delegateMessageResponsibility(RasPiMessage* message) {
 
     case GPS_SPEED_ID: {
       if (message->iCode == ICode::SET) {
-          Serial.println("Shouldn't have to set GPS speed");
+          outMessage = rasPiSerialInstance.buildOutMessage(ICode::ERR, GPS_SPEED_ID, "NA");
+          Serial.println(outMessage);
 
       } else if (message->iCode == ICode::GET) {
           // get GPS speed
