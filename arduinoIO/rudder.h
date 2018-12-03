@@ -13,6 +13,7 @@ public:
   void begin(int pin);
 
   void setAngle(float angle);
+  void setPeriod(int period);
   float getAngle();
 private:
   void debug(String msg);

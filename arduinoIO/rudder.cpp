@@ -18,7 +18,11 @@ void Rudder::setAngle(float angle) {
 	//confine rudder angle to max range
 	angle_ = angle > RUDDER_ANGLE_MAX ? RUDDER_ANGLE_MAX : (angle < -RUDDER_ANGLE_MAX ? -RUDDER_ANGLE_MAX : angle);
 	calculatePeriod();
-	rudder_servo_.writeMicroseconds(rudder_servo_period_);
+	setPeriod(rudder_servo_period_);
+}
+
+void Rudder::setPeriod(int period) {
+	rudder_servo_.writeMicroseconds(period);
 }
 
 float Rudder::getAngle() {

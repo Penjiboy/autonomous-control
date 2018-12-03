@@ -12,7 +12,11 @@ void Motor::begin(int pin) {
 void Motor::setSpeed(float speed) {
 	speed_ = speed > 1 ? 1 : (speed < -1 ? -1 : speed);
 	calculatePeriod();
-	esc_.writeMicroseconds(esc_period_);
+	setPeriod(esc_period_);
+}
+
+void Motor::setPeriod(int period) {
+	esc_.writeMicroseconds(period);
 }
 
 float Motor::getSpeed() {

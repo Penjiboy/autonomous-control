@@ -14,6 +14,7 @@ public:
   void begin(int pin);
 
   void setSpeed(float speed);
+  void setPeriod(int period);
   float getSpeed();
 private:
   void debug(String msg);
