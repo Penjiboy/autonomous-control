@@ -17,3 +17,10 @@ while gps_ready == 0:
         time.sleep(1)
 
 print("GPS ready...")
+
+while true:
+    print("Latitiude:" + interface.getLatitude())
+    print("Longitude:" + interface.getLongitude())
+    print("Heading:" + interface.getGpsHeading())
+    print("Speed:" + interface.getGpsSpeed())
+    time.sleep(1)
