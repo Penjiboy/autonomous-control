@@ -61,6 +61,7 @@ while position.distance_to(target) > .001:
 
     print("Position: " + str(position))
     print("Course: " + str(course))
+    print("Angle to proper heading: " + str(course.angle_to(target-position)))
 
     interface.setRudderAngle(course.angle_to(target-position)/5)
 
