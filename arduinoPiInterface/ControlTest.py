@@ -75,7 +75,7 @@ pid = PID.PID(.3, .1, .01)
 while True:
     # until within very approximately 10m of desination
 
-    if(position.distance_to(target) < .001):
+    if(position.distance_to(getTarget()) < .001):
         targetnum += 1
         print("Target reached")
 
