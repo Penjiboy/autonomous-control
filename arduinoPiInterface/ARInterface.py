@@ -3,14 +3,11 @@
 # Coordinate interaction between Raspberry Pi's C++ code/instructions with the Arduino serial and vice versa
 # through reading/writing a file and mirroring on the serial
 
-import logging
 import serial
 import time
 import sys
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-
-logging.basicConfig(format='%(asctime)s %(message)s')
 
 ser = None
 serialLogsFile = None

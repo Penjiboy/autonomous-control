@@ -8,7 +8,8 @@ import PID
 from Vector import Vector as v2
 from SerialIO import SerialIO
 
-log.basicConfig(filname="/home/pi/autonomous-control/arduinoPiInterface", level=log.DEBUG,
+log.basicConfig(filname='/home/pi/autonomous-control/arduinoPiInterface/test.log',
+                level=log.DEBUG,
                 format='%(asctime)s %(message)s')
 log.info("tetst log message")
 
