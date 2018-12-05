@@ -1,23 +1,27 @@
 #!/usr/bin/python3
 
 import serial
+from serial import SerialException
 
-class SerialIO :
+
+class SerialIO:
+    """Serial Communication with arduino for voyage craft nimrod."""
+
     ser = None
 
     def __read(self):
-        messageRead = ser.read_all().decode("utf8")
+        messageRead = self.ser.read_all().decode("utf8")
 
         while messageRead == "":
-            messageRead = ser.read_all().decode("utf8")
+            messageRead = self.ser.read_all().decode("utf8")
 
         return messageRead
 
     def __write(self, message):
-        ser.write(bytes(message, "utf8"))
+        self.ser.write(bytes(message, "utf8"))
 
     def verifyCorrectID(self, message, correctID):
-        """Verify the correct ID"""
+        """Verify the correct ID."""
         id = message[4:6]
         if id == correctID:
             return True
@@ -75,49 +79,45 @@ class SerialIO :
         return self.__getGeneric("06")
 
     def __init__(self, port=None):
-        if port is not None:
-            global ser
-            ser = serial.Serial(port, 9600)
 
-        else :
+        if port is not None:
+            self.self.ser = serial.Serial(port, 9600)
+
+        else:
 
             try:
-            #global ser
-                ser = serial.Serial('/dev/ttyACM0', 9600)
-        
-            except:
-                print('arduino not available on /dev/ttyACM0')
-                
-            if ser is None:
-                try:
-                    #global ser
-                    ser = serial.Serial('/dev/ttyACM1', 9600)
+                self.self.ser = serial.Serial('/dev/ttyACM0', 9600)
 
-                except:
+            except SerialException:
+                print('arduino not available on /dev/ttyACM0')
+
+            if self.ser is None:
+                try:
+                    self.self.ser = serial.Serial('/dev/ttyACM1', 9600)
+
+                except SerialException:
                     print('arduino not available on /dev/ttyACM1')
 
-            if ser is None:
+            if self.ser is None:
                 try:
-                    #global ser
-                    ser = serial.Serial('/dev/ttyACM2', 9600)
+                    self.ser = serial.Serial('/dev/ttyACM2', 9600)
 
-                except:
+                except SerialException:
                     print('arduino not available on /dev/ttyACM2')
 
-            if ser is None:
+            if self.ser is None:
                 try:
-                    #global ser
-                    ser = serial.Serial('/dev/ttyACM3', 9600)
+                    self.ser = serial.Serial('/dev/ttyACM3', 9600)
 
-                except:
+                except SerialException:
                     print('arduino not available on /dev/ttyACM3')
-    
-        if ser is None:
+
+        if self.ser is None:
             print('arduino serial unavailable')
             raise Exception("Failed to initialize arduino")
 
         print("Arduino available and connected")
-        ser.read_all()
+        self.ser.read_all()
 
 
 if __name__ == "__main__":
