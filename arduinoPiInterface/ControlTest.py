@@ -43,8 +43,12 @@ for _ in range(3):
 
 time.sleep(5)
 
+position.set_coords((interface.getLatitude(), interface.getLongitude()))
+course.set_from_polar((interface.getGpsSpeed(), interface.getGpsHeading()))
+
 print("Autonomous mode...")
 print("Seeking coordinates: " + str(target))
+print("From position: " + str(position))
 
 interface.setMotorPower(0.5)
 
