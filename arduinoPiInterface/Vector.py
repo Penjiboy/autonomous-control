@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import math as m
+import math
 
 
 class Vector:
@@ -8,15 +8,15 @@ class Vector:
     y = 0
 
     def set_from_polar(self, r, rho):
-        self.x = r * m.cos(m.radians(rho))
-        self.y = r * m.sin(m.radians(rho))
+        self.x = r * math.cos(math.radians(rho))
+        self.y = r * math.sin(math.radians(rho))
 
     def distance_to(self, other):
         tmp = other - self
-        return m.hyp(tmp.x, tmp.y)
+        return math.hypot(tmp.x, tmp.y)
 
     def angle_to(self, other):
-        return m.atan2(other.x, other.y) - m.atan2(self.x, self.y)
+        return math.atan2(other.x, other.y) - math.atan2(self.x, self.y)
 
     def set_coords(self, coords):
         self.x = coords[0]
