@@ -56,8 +56,7 @@ while position.distance_to(target) > .001:
     # until within very approximately 10m of desination
 
     position.set_coords((interface.getLatitude(), interface.getLongitude()))
-    course.set_from_polar((interface.getGpsSpeed(),
-                           interface.getGpsHeading()))
+    course.set_from_polar(interface.getGpsSpeed(), interface.getGpsHeading())
 
     print("Position: " + str(position))
     print("Course: " + str(course))
