@@ -21,7 +21,7 @@ char Serialbuf[82];
 int NMEAbuf_pointer = 0;
 int Serialbuf_pointer = 0;
 int rc_timeout;
-int battery_level
+int battery_level;
 RasPiSerial rasPiSerialInstance;
 PulsePositionInput rc;
 IntervalTimer RCTimer;
@@ -205,7 +205,7 @@ void updateControl() {
       rudder.releasePeriod();
 		}
 
-		batttery_level = (tmp > 1300);
+		battery_level = (tmp > 1300);
 
 		rc.read(endChannel); //clear ppm buffer until next frame comes in.
 

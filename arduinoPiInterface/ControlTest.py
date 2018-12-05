@@ -3,6 +3,7 @@
 import atexit
 import time
 import datetime
+import PID
 from Vector import Vector as v2
 from SerialIO import SerialIO
 
@@ -53,6 +54,8 @@ print("Seeking coordinates: " + str(target))
 print("From position: " + str(position))
 
 interface.setMotorPower(0.05)
+
+pid = PID()
 
 while position.distance_to(target) > .001:
     # until within very approximately 10m of desination
