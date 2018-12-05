@@ -34,7 +34,7 @@ for _ in range(3):
 time.sleep(10)
 
 print("Autonomous mode...")
-print("Seeking coordinates: " + target)
+print("Seeking coordinates: " + str(target))
 
 interface.setMotorPower(0.5)
 
@@ -45,8 +45,8 @@ while position.distance_to(target) > .001:
     course.set_from_polar((interface.getGpsSpeed(),
                            interface.getGpsHeading()))
 
-    print("Position: " + position)
-    print("Course: " + course)
+    print("Position: " + str(position))
+    print("Course: " + str(course))
 
     interface.setRudderAngle(course.angle_to(target-position)/5)
 
