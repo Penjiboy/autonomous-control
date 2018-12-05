@@ -3,6 +3,8 @@
 import serial
 from serial import SerialException
 
+BAUD = 9600
+
 
 class SerialIO:
     """Serial Communication with arduino for voyage craft nimrod."""
@@ -34,6 +36,7 @@ class SerialIO:
         response = self.__read()
 
         while not self.verifyCorrectID(response, id):
+            print("incorrect msg: " + response)
             response = self.__read()
 
         return response[6:-3]
@@ -81,33 +84,33 @@ class SerialIO:
     def __init__(self, port=None):
 
         if port is not None:
-            self.ser = serial.Serial(port, 9600)
+            self.ser = serial.Serial(port, BAUD)
 
         else:
 
             try:
-                self.ser = serial.Serial('/dev/ttyACM0', 9600)
+                self.ser = serial.Serial('/dev/ttyACM0', BAUD)
 
             except SerialException:
                 print('arduino not available on /dev/ttyACM0')
 
             if self.ser is None:
                 try:
-                    self.ser = serial.Serial('/dev/ttyACM1', 9600)
+                    self.ser = serial.Serial('/dev/ttyACM1', BAUD)
 
                 except SerialException:
                     print('arduino not available on /dev/ttyACM1')
 
             if self.ser is None:
                 try:
-                    self.ser = serial.Serial('/dev/ttyACM2', 9600)
+                    self.ser = serial.Serial('/dev/ttyACM2', BAUD)
 
                 except SerialException:
                     print('arduino not available on /dev/ttyACM2')
 
             if self.ser is None:
                 try:
-                    self.ser = serial.Serial('/dev/ttyACM3', 9600)
+                    self.ser = serial.Serial('/dev/ttyACM3', BAUD)
 
                 except SerialException:
                     print('arduino not available on /dev/ttyACM3')
