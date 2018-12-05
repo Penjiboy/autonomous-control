@@ -66,9 +66,9 @@ print("Autonomous mode...")
 print("Seeking coordinates: " + str(getTarget()))
 print("From position: " + str(position))
 
-interface.setMotorPower(0.05)
+interface.setMotorPower(0.5)
 
-pid = PID.PID(.3, .1, .01)
+time.sleep(5)
 
 while True:
     # until within very approximately 10m of desination
