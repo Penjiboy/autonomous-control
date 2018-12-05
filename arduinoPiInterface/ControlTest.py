@@ -8,6 +8,7 @@ from SerialIO import SerialIO
 
 def end():
     global interface
+    print("exiting gracefully...")
     interface.setMotorPower(0)
     interface.setRudderAngle(0)
 
