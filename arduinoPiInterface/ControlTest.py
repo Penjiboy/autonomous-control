@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import logging as log
+import logging
 import atexit
 import time
 import datetime
@@ -8,10 +8,10 @@ import PID
 from Vector import Vector as v2
 from SerialIO import SerialIO
 
-log.basicConfig(filname='test.log',
-                level=log.INFO,
-                format='%(asctime)s %(message)s')
-log.info("tetst log message")
+logging.basicConfig(filname='test.log',
+                    level=logging.INFO,
+                    format='%(asctime)s %(message)s')
+logging.info("tetst log message")
 
 
 def end():
