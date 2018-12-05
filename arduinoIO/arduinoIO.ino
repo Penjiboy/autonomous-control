@@ -235,7 +235,6 @@ void loop() {
 }
 
 void serialEvent() {
-
   if(Serial.available()) {
     rasPiSerialInstance.readSerial(Serial.readString());
   }
