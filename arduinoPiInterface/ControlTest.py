@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import time
-import pygame.math.Vector2 as v2
+from pygame.math import Vector2 as v2
 from SerialIO import SerialIO
 
 target = v2
