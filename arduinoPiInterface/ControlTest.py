@@ -23,7 +23,7 @@ while gps_ready == 0:
 print("GPS ready...")
 print("Running init")
 
-for _ in range(10):
+for _ in range(3):
     print("Latitiude:" + interface.getLatitude())
     print("Longitude:" + interface.getLongitude())
     print("Heading:" + interface.getGpsHeading())
