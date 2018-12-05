@@ -46,7 +46,7 @@ class SerialIO:
         self.__write(message)
 
     def setRudderAngle(self, angle):
-        self.__setGeneric("51", angle)
+        self.__setGeneric("51", str(angle))
 
     def getGpsHeading(self):
         return self.__getGeneric("08")
@@ -55,7 +55,7 @@ class SerialIO:
         return self.__getGeneric("09")
 
     def setRpm(self, rpmVal):
-        self.__setGeneric("07", rpmVal)
+        self.__setGeneric("07", str(rpmVal))
 
     def getRpm(self):
         return self.__getGeneric("07")
@@ -70,7 +70,7 @@ class SerialIO:
         return self.__getGeneric("03")
 
     def setMotorPower(self, percent):
-        self.__setGeneric("50", percent)
+        self.__setGeneric("50", str(percent))
 
     def getBatteryLevel(self):
         return self.__getGeneric("04")
