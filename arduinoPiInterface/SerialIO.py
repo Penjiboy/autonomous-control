@@ -81,19 +81,19 @@ class SerialIO:
     def __init__(self, port=None):
 
         if port is not None:
-            self.self.ser = serial.Serial(port, 9600)
+            self.ser = serial.Serial(port, 9600)
 
         else:
 
             try:
-                self.self.ser = serial.Serial('/dev/ttyACM0', 9600)
+                self.ser = serial.Serial('/dev/ttyACM0', 9600)
 
             except SerialException:
                 print('arduino not available on /dev/ttyACM0')
 
             if self.ser is None:
                 try:
-                    self.self.ser = serial.Serial('/dev/ttyACM1', 9600)
+                    self.ser = serial.Serial('/dev/ttyACM1', 9600)
 
                 except SerialException:
                     print('arduino not available on /dev/ttyACM1')
