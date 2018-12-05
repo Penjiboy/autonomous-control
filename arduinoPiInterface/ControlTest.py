@@ -65,12 +65,12 @@ position.set_coords((interface.getLatitude(), interface.getLongitude()))
 course.set_from_polar(interface.getGpsSpeed(), interface.getGpsHeading())
 
 print("Autonomous mode...")
-print("Seeking coordinates: " + str(target))
+print("Seeking coordinates: " + str(getTarget()))
 print("From position: " + str(position))
 
 interface.setMotorPower(0.05)
 
-pid = PID(.3, .1, .01)
+pid = PID.PID(.3, .1, .01)
 
 while True:
     # until within very approximately 10m of desination
@@ -87,7 +87,7 @@ while True:
     print("Course: " + str(course))
     print("Angle to proper heading: " + str(course.angle_to(target-position)))
 
-    interface.setRudderAngle(course.angle_to(getTarget-position)/5)
+    interface.setRudderAngle(course.angle_to(getTarget()-position)/5)
 
     time.sleep(1)
 
