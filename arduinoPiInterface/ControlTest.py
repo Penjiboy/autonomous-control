@@ -85,7 +85,7 @@ while True:
 
     print("Position: " + str(position))
     print("Course: " + str(course))
-    print("Angle to proper heading: " + str(course.angle_to(target-position)))
+    print("Angle to proper heading: " + str(course.angle_to(getTarget()-position)))
 
     interface.setRudderAngle(course.angle_to(getTarget()-position)/5)
 
