@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import logging
+import logging as log
 import atexit
 import time
 import datetime
@@ -8,7 +8,8 @@ import PID
 from Vector import Vector as v2
 from SerialIO import SerialIO
 
-logging.basicConfig(filname="test.log", format='%(asctime)s %(message)s')
+log.basicConfig(filname="test.log", format='%(asctime)s %(message)s')
+log.info("tetst log message")
 
 def end():
     global interface
