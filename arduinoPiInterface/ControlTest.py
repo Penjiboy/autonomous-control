@@ -72,8 +72,6 @@ interface.setMotorPower(0.05)
 
 pid = PID(.3, .1, .01)
 
-datalog =
-
 while True:
     # until within very approximately 10m of desination
 
