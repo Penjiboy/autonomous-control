@@ -4,9 +4,9 @@ import time
 from Vector import Vector as v2
 from SerialIO import SerialIO
 
-target = v2
-position = v2
-course = v2
+target = v2()
+position = v2()
+course = v2()
 
 gps_ready = 0
 interface = SerialIO()
@@ -31,10 +31,10 @@ for _ in range(3):
     print("===")
     time.sleep(1)
 
-time.sleep(10)
+time.sleep(5)
 
 print("Autonomous mode...")
-print("Seeking coordinates: " + str(target))
+print("Seeking coordinates: " + target)
 
 interface.setMotorPower(0.5)
 
@@ -45,8 +45,8 @@ while position.distance_to(target) > .001:
     course.set_from_polar((interface.getGpsSpeed(),
                            interface.getGpsHeading()))
 
-    print("Position: " + str(position))
-    print("Course: " + str(course))
+    print("Position: " + position)
+    print("Course: " + course)
 
     interface.setRudderAngle(course.angle_to(target-position)/5)
 
