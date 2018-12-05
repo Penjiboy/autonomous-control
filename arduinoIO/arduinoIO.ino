@@ -239,8 +239,8 @@ void loop() {
 void serialEvent() {
   while(Serial.available()) {
 	  if((Serialbuf[Serialbuf_pointer++] = Serial.read()) == '*') {
-      String tmp(Serialbuf);
-		  rasPiSerialInstance.readSerial(tmp.substring(0,Serialbuf_pointer));
+      String temp(Serialbuf);
+		  rasPiSerialInstance.readSerial(temp.substring(0,Serialbuf_pointer));
 		  Serialbuf_pointer = 0;
 	  }
   }
