@@ -83,7 +83,7 @@ void delegateMessageResponsibility(RasPiMessage* message) {
 
     case BATTERY_LEVEL_ID: {
       if(message->iCode == ICode::SET){
-        outMessage = rasPiSerialInstance.buildOutMessage(ICode::ERR, BATTERY_LEVEL_ID, String(battery_level));
+        outMessage = rasPiSerialInstance.buildOutMessage(ICode::ERR, BATTERY_LEVEL_ID, "NA");
         Serial.println(outMessage);
       } else if(message->iCode == ICode::GET) {
           // get Battery level (percent)

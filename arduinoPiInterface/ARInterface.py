@@ -1,13 +1,16 @@
 #!/usr/bin/python3
 
-# Coordinate interaction between Raspberry Pi's C++ code/instructions with the Arduino serial and vice versa 
+# Coordinate interaction between Raspberry Pi's C++ code/instructions with the Arduino serial and vice versa
 # through reading/writing a file and mirroring on the serial
 
+import logging
 import serial
 import time
 import sys
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+
+logging.basicConfig(format='%(asctime)s %(message)s')
 
 ser = None
 serialLogsFile = None
@@ -62,7 +65,7 @@ class Handler(FileSystemEventHandler):
         # move the file object's position to the last set position
         global filePosition
         serialLogsFile.seek(filePosition)
-        
+
         # write to the Arduino Serial the next line in the file
         serialWrite(serialLogsFile.readline())
 
@@ -81,11 +84,11 @@ class Handler(FileSystemEventHandler):
         elif event.event_type == 'modified':
             # Taken any action here when a file is modified.
             print("Received file modified event - %s." % event.src_path)
-            
+
             # move the file object's position to the last set position
             global filePosition
             serialLogsFile.seek(filePosition)
-            
+
             # write to the Arduino Serial the next line in the file
             messageToWriteToSerial = serialLogsFile.readline()
             print("message to write to serial: ", messageToWriteToSerial)
@@ -120,10 +123,10 @@ def main():
         try:
             #global ser
             ser = serial.Serial('/dev/ttyACM0', 9600)
-        
+
         except:
             print('arduino not available on /dev/ttyACM0')
-            
+
         if ser is None:
             try:
                 #global ser
@@ -147,7 +150,7 @@ def main():
 
             except:
                 print('arduino not available on /dev/ttyACM3')
-    
+
     if ser is None:
         print('arduino serial unavailable')
         return

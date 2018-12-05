@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import logging
 import atexit
 import time
 import datetime
@@ -7,6 +8,7 @@ import PID
 from Vector import Vector as v2
 from SerialIO import SerialIO
 
+logging.basicConfig(filname="test.log", format='%(asctime)s %(message)s')
 
 def end():
     global interface
@@ -17,9 +19,21 @@ def end():
 
 atexit.register(end)
 
-target = v2()
+targetnum = 0
+aux = 0
+
+target = [v2(49.273889, -123.191995), v2(49.273232, -123.193417), v2(), v2()]
+home = v2(49.273010, -123.191855)
 position = v2()
 course = v2()
+
+
+def getTarget():
+    if(aux == 0 and targetnum < len(target)):
+        return target[targetnum]
+    else:
+        return home
+
 
 gps_ready = 0
 interface = SerialIO()
@@ -55,19 +69,26 @@ print("From position: " + str(position))
 
 interface.setMotorPower(0.05)
 
-pid = PID()
+pid = PID(.3, .1, .01)
 
-while position.distance_to(target) > .001:
+datalog =
+
+while True:
     # until within very approximately 10m of desination
+
+    if(position.distance_to(target) < .001):
+        targetnum += 1
+        print("Target reached")
 
     position.set_coords((interface.getLatitude(), interface.getLongitude()))
     course.set_from_polar(interface.getGpsSpeed(), interface.getGpsHeading())
+    aux = interface.getBatteryLevel()
 
     print("Position: " + str(position))
     print("Course: " + str(course))
     print("Angle to proper heading: " + str(course.angle_to(target-position)))
 
-    interface.setRudderAngle(course.angle_to(target-position)/5)
+    interface.setRudderAngle(course.angle_to(getTarget-position)/5)
 
     time.sleep(1)
 
