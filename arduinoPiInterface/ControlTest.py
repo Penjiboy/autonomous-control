@@ -87,7 +87,7 @@ while True:
 
     with open('test.csv', 'a') as test:
         writer = csv.writer(test)
-        writer.writerow([str(position), str(course), str(getTarget), str(course.angle_to(getTarget()-position))])
+        writer.writerow([str(position), str(course), str(getTarget()), str(course.angle_to(getTarget()-position))])
 
     interface.setRudderAngle(course.angle_to(getTarget()-position)/5)
 
