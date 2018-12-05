@@ -45,9 +45,8 @@ while position.distance_to(target) > .001:
     course = course.from_polar((interface.getGpsSpeed(),
                                 interface.getGpsHeading()))
 
-    print("Position: " + position)
-    print("Course: " + course)
-    print("Calculated course: " + (target-position))
+    print("Position: " + position.x + ", " + position.y)
+    print("Course: " + course.x + ", " + course.y)
 
     interface.setRudderAngle(course.angle_to(target-position)/5)
 
