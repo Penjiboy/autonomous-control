@@ -17,7 +17,9 @@ GPS gps;
 
 char tmp;
 char NMEAbuf[82];
+char Serialbuf[82];
 int NMEAbuf_pointer = 0;
+int Serialbuf_pointer = 0;
 int rc_timeout;
 RasPiSerial rasPiSerialInstance;
 PulsePositionInput rc;
@@ -235,11 +237,12 @@ void loop() {
 }
 
 void serialEvent() {
-  if(Serial.available()) {
-    rasPiSerialInstance.readSerial(Serial.readString());
+  while(Serial.available()) {
+	  if((Serialbuf[Serialbuf_pointer++] = Serial.read()) == '*') {
+		  rasPiSerialInstance.readSerial(string(Serialbuf, Serialbuf_pointer));
+		  Serialbuf_pointer = 0;
+	  }
   }
-
-  Serial.clear();
 }
 
 void serialEvent1() {

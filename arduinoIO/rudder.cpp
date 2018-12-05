@@ -6,7 +6,7 @@
 //the travel range of the rudder in degrees i.e. RUDDER_PERIOD_RANGE in us should correspond to RUDDER_ANGLE_RANGE in degrees
 #define RUDDER_ANGLE_RANGE 180
 #define RUDDER_ANGLE_MAX 40 //half the range of the rudder in radians
-#define RUDDER_ANGLE_NEUTRAL 0 //servo angle for neutral rudder position
+#define RUDDER_ANGLE_NEUTRAL 13 //servo angle for neutral rudder position
 
 void Rudder::begin(int pin) {
 	debug("Initializing Rudder Servo.");
