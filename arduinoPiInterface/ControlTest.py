@@ -2,6 +2,7 @@
 
 import atexit
 import time
+import datetime
 from Vector import Vector as v2
 from SerialIO import SerialIO
 
