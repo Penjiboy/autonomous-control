@@ -1,17 +1,12 @@
 #!/usr/bin/python3
 
-import logging
+import csv
 import atexit
 import time
 import datetime
 import PID
 from Vector import Vector as v2
 from SerialIO import SerialIO
-
-logging.basicConfig(filname='test.log',
-                    level=logging.INFO,
-                    format='%(asctime)s %(message)s')
-logging.info("tetst log message")
 
 
 def end():
@@ -89,6 +84,10 @@ while True:
     print("Position: " + str(position))
     print("Course: " + str(course))
     print("Angle to proper heading: " + str(course.angle_to(getTarget()-position)))
+
+    with open('test.csv', 'a') as test:
+        writer = csv.writer(test)
+        writer.writerow([str(position), str(course), str(getTarget), str(course.angle_to(getTarget()-position))])
 
     interface.setRudderAngle(course.angle_to(getTarget()-position)/5)
 
