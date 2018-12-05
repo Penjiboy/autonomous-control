@@ -64,4 +64,6 @@ while position.distance_to(target) > .001:
 
     interface.setRudderAngle(course.angle_to(target-position)/5)
 
+    time.sleep(1)
+
 interface.setMotorPower(0)
