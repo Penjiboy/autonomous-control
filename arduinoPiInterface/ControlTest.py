@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import time
-from pygame.math import Vector2 as v2
+from Vector import Vector as v2
 from SerialIO import SerialIO
 
 target = v2
@@ -34,19 +34,19 @@ for _ in range(3):
 time.sleep(10)
 
 print("Autonomous mode...")
-print("Seeking coordinates: " + target.x + ", " + target.y)
+print("Seeking coordinates: " + target)
 
 interface.setMotorPower(0.5)
 
 while position.distance_to(target) > .001:
     # until within very approximately 10m of desination
 
-    position = v2(interface.getLatitude(), interface.getLongitude())
-    course = course.from_polar((interface.getGpsSpeed(),
-                                interface.getGpsHeading()))
+    position.set_coords((interface.getLatitude(), interface.getLongitude()))
+    course.set_from_polar((interface.getGpsSpeed(),
+                           interface.getGpsHeading()))
 
-    print("Position: " + position.x + ", " + position.y)
-    print("Course: " + course.x + ", " + course.y)
+    print("Position: " + position)
+    print("Course: " + course)
 
     interface.setRudderAngle(course.angle_to(target-position)/5)
 
