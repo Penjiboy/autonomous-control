@@ -8,8 +8,10 @@ import PID
 from Vector import Vector as v2
 from SerialIO import SerialIO
 
-log.basicConfig(filname="test.log", format='%(asctime)s %(message)s')
+log.basicConfig(filname="test.log", level=log.DEBUG,
+                format='%(asctime)s %(message)s')
 log.info("tetst log message")
+
 
 def end():
     global interface
