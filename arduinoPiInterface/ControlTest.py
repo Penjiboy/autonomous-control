@@ -1,8 +1,18 @@
 #!/usr/bin/python3
 
+import atexit
 import time
 from Vector import Vector as v2
 from SerialIO import SerialIO
+
+
+def end():
+    global interface
+    interface.setMotorPower(0)
+    interface.setRudderAngle(0)
+
+
+atexit.register(end)
 
 target = v2()
 position = v2()
