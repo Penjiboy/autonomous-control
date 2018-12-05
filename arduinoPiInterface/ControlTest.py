@@ -34,7 +34,7 @@ for _ in range(3):
 time.sleep(10)
 
 print("Autonomous mode...")
-print("Seeking coordinates: " + target)
+print("Seeking coordinates: " + target.x + ", " + target.y)
 
 interface.setMotorPower(0.5)
 
