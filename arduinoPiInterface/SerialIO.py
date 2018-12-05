@@ -1,16 +1,19 @@
+#!/usr/bin/python3
+
 import serial
 
 class SerialIO :
     ser = None
 
-    def read(self):
-        messageRead = ser.read_all()
-        while messageRead != "":
-            messageRead = ser.read_all()
+    def __read(self):
+        messageRead = ser.read_all().decode("utf8")
 
-        return messageRead.decode("utf8")
+        while messageRead == "":
+            messageRead = ser.read_all().decode("utf8")
 
-    def write(self, message):
+        return messageRead
+
+    def __write(self, message):
         ser.write(bytes(message, "utf8"))
 
     def verifyCorrectID(self, message, correctID):
@@ -21,28 +24,57 @@ class SerialIO :
         else:
             return False
 
-    def getGeneric(self, id):
+    def __getGeneric(self, id):
         message = "$GET" + id + "*"
-        self.write(message)
-        response = self.read()
+        self.__write(message)
+        response = self.__read()
 
         while not self.verifyCorrectID(response, id):
-            response = self.read()
+            response = self.__read()
 
-        return response[6:-1]
+        return response[6:-3]
 
-    def setGeneric(self, id, value):
+    def __setGeneric(self, id, value):
         message = "$SET" + id + value + "*"
-        self.write(message)
+        self.__write(message)
 
     def setRudderAngle(self, angle):
-        self.setGeneric("51", angle)
+        self.__setGeneric("51", angle)
 
     def getGpsHeading(self):
-        return self.getGeneric("08")
+        return self.__getGeneric("08")
 
-    def initialize(self, port=None):
-        ### Return true if initialized successfully, false otherwise
+    def getGpsSpeed(self):
+        return self.__getGeneric("09")
+
+    def setRpm(self, rpmVal):
+        self.__setGeneric("07", rpmVal)
+
+    def getRpm(self):
+        return self.__getGeneric("07")
+
+    def getLatitude(self):
+        return self.__getGeneric("01")
+
+    def getLongitude(self):
+        return self.__getGeneric("02")
+
+    def getBoatPower(self):
+        return self.__getGeneric("03")
+
+    def setMotorPower(self, percent):
+        self.__setGeneric("50", percent)
+
+    def getBatteryLevel(self):
+        return self.__getGeneric("04")
+
+    def getMotorTemperature(self):
+        return self.getGeneric("05")
+
+    def getBatteryVoltage(self):
+        return self.__getGeneric("06")
+
+    def __init__(self, port=None):
         if port is not None:
             global ser
             ser = serial.Serial(port, 9600)
@@ -51,7 +83,7 @@ class SerialIO :
 
             try:
             #global ser
-            ser = serial.Serial('/dev/ttyACM0', 9600)
+                ser = serial.Serial('/dev/ttyACM0', 9600)
         
             except:
                 print('arduino not available on /dev/ttyACM0')
@@ -82,8 +114,12 @@ class SerialIO :
     
         if ser is None:
             print('arduino serial unavailable')
-            return False
+            raise Exception("Failed to initialize arduino")
 
         print("Arduino available and connected")
         ser.read_all()
-        return True
+
+
+if __name__ == "__main__":
+    io = SerialIO()
+    print(io.getBoatPower())
