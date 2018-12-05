@@ -192,7 +192,7 @@ void updateControl() {
 	int endChannel;
 	if((endChannel = rc.available()) > 0) {
     rc_timeout = 0;
-    
+
 		if(rc.read(MANUAL_OVERRIDE_CHANNEL) > 1500) {
 			motor.setPeriod(rc.read(MOTOR_CHANNEL));
 			rudder.setPeriod(rc.read(RUDDER_CHANNEL));
@@ -200,9 +200,9 @@ void updateControl() {
       motor.releasePeriod();
       rudder.releasePeriod();
 		}
-   
+
 		rc.read(endChannel); //clear ppm buffer until next frame comes in.
-    
+
 	} else if(rc_timeout > 50) { //if rc reception is timed out return control to autonomous
     motor.releasePeriod();
     rudder.releasePeriod();
@@ -232,7 +232,6 @@ void loop() {
   if(!rasPiSerialInstance.messageQueue.isEmpty()){
     delegateMessageResponsibility(rasPiSerialInstance.messageQueue.front());
   }
-  delay(1500);
 }
 
 void serialEvent() {

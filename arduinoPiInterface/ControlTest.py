@@ -3,15 +3,13 @@
 import time
 from SerialIO import SerialIO
 
-print("Starting, reading GPS")
+print("Starting, waiting for GPS...")
 
 gps_ready = 0
 interface = SerialIO()
 
 while gps_ready == 0:
-    tmp = interface.getGpsSpeed()
-    print(tmp)
-    if tmp != 0:
+    if interface.getGpsSpeed() != 0:
         gps_ready = 1
     else:
         time.sleep(1)
@@ -23,4 +21,5 @@ while True:
     print("Longitude:" + interface.getLongitude())
     print("Heading:" + interface.getGpsHeading())
     print("Speed:" + interface.getGpsSpeed())
+    print("===")
     time.sleep(1)

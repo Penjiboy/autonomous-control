@@ -18,7 +18,7 @@ class SerialIO:
         return messageRead
 
     def __write(self, message):
-        self.ser.write(bytes(message).encode("utf8"))
+        self.ser.write(message)
 
     def verifyCorrectID(self, message, correctID):
         """Verify the correct ID."""
