@@ -217,7 +217,8 @@ void updateControl() {
 		rc.read(endChannel); //clear ppm buffer until next frame comes in.
 
 	} else if(rc_timeout > 50) { //if rc reception is timed out return control to autonomous
-    motor.releasePeriod();
+		battery_level = 0;
+	 motor.releasePeriod();
     rudder.releasePeriod();
 	}
 }
