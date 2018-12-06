@@ -99,7 +99,7 @@ while True:
     with open('test.csv', 'a') as test:
         writer = csv.writer(test)
         writer.writerow([str(datetime.datetime.now()),
-                         str(position.x), str(position.y),
+                         str(position),
                          str(course), str(getTarget()),
                          str(course.angle_to(getTarget()-position))])
 
