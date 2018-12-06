@@ -18,7 +18,9 @@ class Vector:
         return math.hypot(tmp.x, tmp.y)
 
     def angle_to(self, other):
-        return math.degrees(math.atan2(self.x*other.y - self.y*other.x, self.x*other.x + self.y*other.y))
+        det = self.x*other.y - self.y*other.x
+        dot = self.x*other.x + self.y*other.y
+        return math.degrees(math.atan2(det, dot))
 
     def set_coords(self, coords):
         self.x = float(coords[0])

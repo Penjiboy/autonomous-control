@@ -18,6 +18,7 @@ void Rudder::begin(int pin) {
 void Rudder::setAngle(float angle) {
 	//confine rudder angle to max range
 	angle_ = (angle > RUDDER_ANGLE_MAX) ? RUDDER_ANGLE_MAX : ((angle < -RUDDER_ANGLE_MAX) ? -RUDDER_ANGLE_MAX : angle);
+	angle_ = -angle_; //fix angle to correct sign (positive to starboard)
 	calculatePeriod();
 	if(!period_override_) rudder_servo_.writeMicroseconds(rudder_servo_period_);
 }
