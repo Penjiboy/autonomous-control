@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import logging
 import csv
 import atexit
 import time
@@ -8,6 +9,8 @@ import PID
 from Vector import Vector as v2
 from SerialIO import SerialIO
 
+logging.basicConfig(filename='test.log', level=logging.DEBUG)
+logging.info('test')
 
 def end():
     global interface
