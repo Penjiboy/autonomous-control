@@ -34,6 +34,7 @@ course = v2()
 
 
 def getTarget():
+    global aux
     if(aux != 0 and targetnum < len(target)):
         return target[targetnum]
     else:
