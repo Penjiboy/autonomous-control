@@ -205,7 +205,14 @@ void updateControl() {
       rudder.releasePeriod();
 		}
 
-		battery_level = (tmp > 1300);
+		if(tmp > 1600)
+			battery_level = 3;
+		else if(tmp > 1400)
+			battery_level = 2;
+		else if(tmp > 1200)
+			battery_level = 1;
+		else
+			battery_level = 0;
 
 		rc.read(endChannel); //clear ppm buffer until next frame comes in.
 
@@ -226,7 +233,7 @@ void setup() {
   gps.begin();
 
   RCTimer.begin(updateControl, 1000*19);
- 
+
   Serial.println("Components setup");
   Serial.clear();
 

@@ -28,7 +28,7 @@ course = v2()
 
 
 def getTarget():
-    if(aux == 0 and targetnum < len(target)):
+    if(aux != 0 and targetnum < len(target)):
         return target[targetnum]
     else:
         return home
