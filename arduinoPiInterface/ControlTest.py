@@ -81,6 +81,7 @@ while True:
     course.set_from_polar(interface.getGpsSpeed(), interface.getGpsHeading())
     aux = interface.getBatteryLevel()
 
+    print("Aux status: " + str(aux))
     print("Position: " + str(position))
     print("Target: " + str(getTarget()))
     print("Course: " + str(course))
