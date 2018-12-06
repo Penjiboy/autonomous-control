@@ -35,11 +35,10 @@ course = v2()
 
 def getTarget():
     global aux
-    if(aux == 0 or targetnum >= len(target)):
-        print('home')
-        return home
-    else:
+    if(aux != 0 and targetnum < len(target)):
         return target[targetnum]
+    else:
+        return home
 
 
 gps_ready = 0
@@ -87,7 +86,7 @@ while True:
 
     position.set_coords((interface.getLatitude(), interface.getLongitude()))
     course.set_from_polar(interface.getGpsSpeed(), interface.getGpsHeading())
-    aux = interface.getBatteryLevel()
+    aux = int(interface.getBatteryLevel())
 
     print("Aux status: " + str(aux))
     print("Position: " + str(position))
