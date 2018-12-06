@@ -66,7 +66,7 @@ print("Autonomous mode...")
 print("Seeking coordinates: " + str(getTarget()))
 print("From position: " + str(position))
 
-interface.setMotorPower(0.5)
+interface.setMotorPower(0.1)
 
 time.sleep(5)
 
