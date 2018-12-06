@@ -82,6 +82,7 @@ while True:
     aux = interface.getBatteryLevel()
 
     print("Position: " + str(position))
+    print("Target: " + str(getTarget()))
     print("Course: " + str(course))
     print("Angle to proper heading: " + str(course.angle_to(getTarget()-position)))
 

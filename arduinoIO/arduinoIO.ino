@@ -225,8 +225,8 @@ void setup() {
   rudder.begin(RUDDER_SERVO_PIN);
   gps.begin();
 
-  RCTimer.begin(updateControl, 1000*15);
-
+  RCTimer.begin(updateControl, 1000*19);
+ 
   Serial.println("Components setup");
   Serial.clear();
 
