@@ -37,6 +37,7 @@ def getTarget():
     global aux
     print(aux)
     if(aux == 0 or targetnum >= len(target)):
+        print('home')
         return home
     else:
         return target[targetnum]
