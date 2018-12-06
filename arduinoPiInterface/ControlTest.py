@@ -12,6 +12,7 @@ from SerialIO import SerialIO
 logging.basicConfig(filename='test.log', level=logging.DEBUG)
 logging.info('test')
 
+
 def end():
     global interface
     print("exiting gracefully...")
@@ -73,7 +74,7 @@ print("Autonomous mode...")
 print("Seeking coordinates: " + str(getTarget()))
 print("From position: " + str(position))
 
-interface.setMotorPower(0.1)
+interface.setMotorPower(0.5)
 
 time.sleep(5)
 
