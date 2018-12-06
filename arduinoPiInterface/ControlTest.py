@@ -24,7 +24,10 @@ atexit.register(end)
 targetnum = 0
 aux = 0
 
-target = [v2(49.273889, -123.191995), v2(49.273232, -123.193417), v2(49.273232, -123.193417), v2(49.273891, -123.194179)]
+target = [v2(49.273889, -123.191995),
+          v2(49.273232, -123.193417),
+          v2(49.273232, -123.193417),
+          v2(49.273891, -123.194179)]
 home = v2(49.273010, -123.191855)
 position = v2()
 course = v2()
@@ -88,11 +91,15 @@ while True:
     print("Position: " + str(position))
     print("Target: " + str(getTarget()))
     print("Course: " + str(course))
-    print("Angle to proper heading: " + str(course.angle_to(getTarget()-position)))
+    print("Angle to proper heading: " +
+          str(course.angle_to(getTarget()-position)))
 
     with open('test.csv', 'a') as test:
         writer = csv.writer(test)
-        writer.writerow([str(datetime.datetime.now()), str(position), str(course), str(getTarget()), str(course.angle_to(getTarget()-position))])
+        writer.writerow([str(datetime.datetime.now()),
+                         str(position.x), str(position.y),
+                         str(course), str(getTarget()),
+                         str(course.angle_to(getTarget()-position))])
 
     interface.setRudderAngle(course.angle_to(getTarget()-position)/3)
 
