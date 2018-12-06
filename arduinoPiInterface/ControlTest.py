@@ -35,10 +35,10 @@ course = v2()
 
 def getTarget():
     global aux
-    if(aux != 0 and targetnum < len(target)):
-        return target[targetnum]
-    else:
+    if(aux == 0 or targetnum >= len(target)):
         return home
+    else:
+        return target[targetnum]
 
 
 gps_ready = 0
