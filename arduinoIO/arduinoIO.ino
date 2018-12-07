@@ -17,8 +17,11 @@ GPS gps;
 
 char tmp;
 char NMEAbuf[82];
+char Serialbuf[82];
 int NMEAbuf_pointer = 0;
+int Serialbuf_pointer = 0;
 int rc_timeout;
+int battery_level;
 RasPiSerial rasPiSerialInstance;
 PulsePositionInput rc;
 IntervalTimer RCTimer;
@@ -47,7 +50,7 @@ void delegateMessageResponsibility(RasPiMessage* message) {
       } else if(message->iCode == ICode::GET) {
         // get GPS latitude
         float latitude = gps.getLatitude();
-        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, GPS_LATITUDE_ID, String(latitude));
+        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, GPS_LATITUDE_ID, String(latitude, 6));
         Serial.println(outMessage);
       }
       break;
@@ -60,7 +63,7 @@ void delegateMessageResponsibility(RasPiMessage* message) {
       } else if(message->iCode == ICode::GET) {
           // get GPS longitude
         float longitude = gps.getLongitude();
-        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, GPS_LONGITUDE_ID, String(longitude));
+        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, GPS_LONGITUDE_ID, String(longitude, 6));
         Serial.println(outMessage);
       }
       break;
@@ -85,7 +88,7 @@ void delegateMessageResponsibility(RasPiMessage* message) {
       } else if(message->iCode == ICode::GET) {
           // get Battery level (percent)
         // not yet implemented
-        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, BATTERY_LEVEL_ID, "NA");
+        outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, BATTERY_LEVEL_ID, String(battery_level));
         Serial.println(outMessage);
       }
       break;
@@ -159,7 +162,7 @@ void delegateMessageResponsibility(RasPiMessage* message) {
         } else if (message->iCode == ICode::GET) {
             // get GPS heading
             float heading = gps.getHeading();
-            outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, GPS_HEADING_ID, String(heading));
+            outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, GPS_HEADING_ID, String(heading, 2));
             Serial.println(outMessage);
         }
         break;
@@ -173,7 +176,7 @@ void delegateMessageResponsibility(RasPiMessage* message) {
       } else if (message->iCode == ICode::GET) {
           // get GPS speed
           float speed = gps.getSOG();
-          outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, GPS_SPEED_ID, String(speed));
+          outMessage = rasPiSerialInstance.buildOutMessage(ICode::VAL, GPS_SPEED_ID, String(speed, 3));
           Serial.println(outMessage);
       }
       break;
@@ -188,23 +191,34 @@ void delegateMessageResponsibility(RasPiMessage* message) {
 }
 
 void updateControl() {
-  rc_timeout++;
+	rc_timeout++;
 	int endChannel;
 	if((endChannel = rc.available()) > 0) {
-    rc_timeout = 0;
-    
-		if(rc.read(MANUAL_OVERRIDE_CHANNEL) > 1500) {
+		rc_timeout = 0;
+		float tmp = rc.read(MANUAL_OVERRIDE_CHANNEL);
+
+		if(tmp > 1600) {
 			motor.setPeriod(rc.read(MOTOR_CHANNEL));
 			rudder.setPeriod(rc.read(RUDDER_CHANNEL));
 		} else { //if in autonomous mode release motor and rudder from manual control
       motor.releasePeriod();
       rudder.releasePeriod();
 		}
-   
+
+		if(tmp > 1600)
+			battery_level = 3;
+		else if(tmp > 1400)
+			battery_level = 2;
+		else if(tmp > 1200)
+			battery_level = 1;
+		else
+			battery_level = 0;
+
 		rc.read(endChannel); //clear ppm buffer until next frame comes in.
-    
+
 	} else if(rc_timeout > 50) { //if rc reception is timed out return control to autonomous
-    motor.releasePeriod();
+		battery_level = 0;
+	 motor.releasePeriod();
     rudder.releasePeriod();
 	}
 }
@@ -219,7 +233,7 @@ void setup() {
   rudder.begin(RUDDER_SERVO_PIN);
   gps.begin();
 
-  RCTimer.begin(updateControl, 1000*15);
+  RCTimer.begin(updateControl, 1000*19);
 
   Serial.println("Components setup");
   Serial.clear();
@@ -232,16 +246,16 @@ void loop() {
   if(!rasPiSerialInstance.messageQueue.isEmpty()){
     delegateMessageResponsibility(rasPiSerialInstance.messageQueue.front());
   }
-  delay(1500);
 }
 
 void serialEvent() {
-
-  if(Serial.available()) {
-    rasPiSerialInstance.readSerial(Serial.readString());
+  while(Serial.available()) {
+	  if((Serialbuf[Serialbuf_pointer++] = Serial.read()) == '*') {
+      String temp(Serialbuf);
+		  rasPiSerialInstance.readSerial(temp.substring(0,Serialbuf_pointer));
+		  Serialbuf_pointer = 0;
+	  }
   }
-
-  Serial.clear();
 }
 
 void serialEvent1() {
