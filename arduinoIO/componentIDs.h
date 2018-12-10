@@ -1,0 +1,18 @@
+#ifndef COMPONENT_IDS_H
+#define COMPONENT_IDS_H
+
+#define GPS_LATITUDE_ID 1
+#define GPS_LONGITUDE_ID 2
+#define BOAT_POWER_ID 3
+#define BATTERY_LEVEL_ID 4
+#define MOTOR_TEMPERATURE_ID 5
+#define BATTERY_VOLTAGE_ID 6
+#define RPM_ID 7
+#define GPS_HEADING_ID 8
+#define GPS_SPEED_ID 9
+
+
+#define MOTOR_POWER_PERCENT_ID 50
+#define RUDDER_ANGLE_ID 51
+
+#endif
