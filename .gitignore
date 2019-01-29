@@ -1,0 +1,6 @@
+*.out
+.idea/
+.vscode/
+*.gch/
+*.gch
+arduinoPiInterface/__pycache__/
