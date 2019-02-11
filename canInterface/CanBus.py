@@ -2,12 +2,21 @@ import can
 import os
 import datetime
 import time
+import threading
 
 class CanBus: 
     
-    _bus
-    _mainListener
-    _notifier
+    _bus = None
+    _mainListener = None
+    _notifier = None
+
+    # global variables
+    bms_soc = None
+    bms_temps = None
+    gps_position = None
+    gps_heading = None
+
+    _error_buffer = []
 
     def __init__(self):
         # Initialize the CAN interface
@@ -36,4 +45,22 @@ class CanBus:
         # initialize the notifier
         global _notifier
         _notifier = can.Notifier(_bus, listenersList)
+
+        # Not sure if this is necessary with notifier
+        #listener_thread = threading.Thread(target=self._listener_loop)
+
+    def get_new_errors(self):
+        new_error_list = list(self._error_buffer)
+        self._error_buffer.clear()
+        return new_error_list
+
+    def send_message(self):
+        pass
+
+    # def _listener_loop(self):
+    #     while True:
+    #         #listen for messages
+
+
+
         
