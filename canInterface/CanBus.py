@@ -55,12 +55,29 @@ class CanBus:
         return new_error_list
 
     def send_message(self):
+        # TODO
         pass
 
     # def _listener_loop(self):
     #     while True:
     #         #listen for messages
 
+
+class MessageListener(can.Listener):
+    """
+    A MessageListener is a subclass of Listener which handles
+    a message whenever a message is received
+    """
+
+    def __init__(self, bus):
+        # not much to do here
+        self.bus = bus
+        pass
+
+    def on_message_received(self, msg):
+        # Parse Message
+
+        # Act on Message
 
 
         
