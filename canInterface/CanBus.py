@@ -3,6 +3,7 @@ import os
 import datetime
 import time
 import threading
+from can import Message
 
 class CanBus: 
     
@@ -62,9 +63,11 @@ class CanBus:
         self._error_buffer.clear()
         return new_error_list
 
-    def send_message(self):
-        # TODO
-        pass
+    def send_message(self, arbitration_id=0, data=None, is_extended_id=False):
+        message = Message(arbitration_id=arbitration_id,is_extended_id=is_extended_id,data=data)
+
+        global _bus
+        _bus.send(message)
 
 
 class MessageListener(can.Listener):
