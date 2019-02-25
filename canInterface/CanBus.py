@@ -13,8 +13,17 @@ class CanBus:
     # global variables
     bms_soc = None
     bms_temps = None
-    gps_position = None
-    gps_heading = None
+    gps_position_detailed = None # GNSSPositionData
+    gps_position_abbreviated = None # GNSSPositionRapidUpdates
+    gps_speed_and_direction = None # NMEACogSogData
+
+    # don't know yet if we need to specify an id for each type of message, or just the device itself
+    arbitration_ids = {
+        'gps_position_detailed': None,
+        'gps_position_abbreviated': None,
+        'gps_speed_and_direction': None,
+        'bms': None,
+    }
 
     _error_buffer = []
 
@@ -32,7 +41,8 @@ class CanBus:
 
         # initialize the main listener
         global _mainListener
-        _mainListener = can.BufferedReader()
+        #_mainListener = can.BufferedReader()
+        _mainListener = MessageListener(self)
 
         # initialize the file logger
         ## universal time in UTC
@@ -46,9 +56,7 @@ class CanBus:
         global _notifier
         _notifier = can.Notifier(_bus, listenersList)
 
-        # Not sure if this is necessary with notifier
-        #listener_thread = threading.Thread(target=self._listener_loop)
-
+        
     def get_new_errors(self):
         new_error_list = list(self._error_buffer)
         self._error_buffer.clear()
@@ -57,10 +65,6 @@ class CanBus:
     def send_message(self):
         # TODO
         pass
-
-    # def _listener_loop(self):
-    #     while True:
-    #         #listen for messages
 
 
 class MessageListener(can.Listener):
@@ -76,8 +80,43 @@ class MessageListener(can.Listener):
 
     def on_message_received(self, msg):
         # Parse Message
-
-        # Act on Message
-
-
+        print("Message received: " + msg)
         
+        if msg.arbitration_id == self.bus.arbitration_ids['gps_position_detailed']:
+            self.process_gps_position_detailed(msg)
+        elif msg.arbitration_id == self.bus.arbitration_ids['gps_position_abbreviated']:
+            self.process_gps_position_abbreviated(msg)
+        elif msg.arbitration_id == self.bus.arbitration_ids['gps_speed_and_direction']:
+            self.process_gps_speed_and_direction(msg)
+        else :
+            print("No appropriate message handler found for message: " + msg)
+        
+
+    def process_gps_position_detailed(self,msg):
+        print("processing gps position detailed")
+        pass
+
+    def process_gps_position_abbreviated(self,msg):
+        print("processing gps position abbreviated")
+        result = {}
+
+        # Parse data
+        # latitude is the first 32 bits
+        latitude = msg.data[:5]
+        # convert to a number
+        # multiply by 0.0000001
+        # check that value is between -90 and 90
+
+        # longitude is the last 32 bits
+        longitude = msg.data[5:]
+        # convert to a number
+        # multiply by 0.0000001
+        # check that value is between -180 and 180
+
+        result.latitude = latitude
+        result.longitude = longitude
+        self.bus.gps_position_abbreviated = result
+
+    def process_gps_speed_and_direction(self,msg):
+        print("processing gps speed and direction")
+        pass
