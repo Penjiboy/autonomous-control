@@ -4,8 +4,8 @@ import datetime
 import time
 import threading
 from can import Message
-from canInterface.GpsCanInterface import GpsCanInterface
-from canInterface.BmsCanInterface import BmsCanInterface
+from GpsCanInterface import GpsCanInterface
+from BmsCanInterface import BmsCanInterface
 
 class CanBus: 
     
