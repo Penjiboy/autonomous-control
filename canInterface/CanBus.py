@@ -48,9 +48,11 @@ class CanBus:
         ts=time.time()
         currentTime = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d_%H:%M:%S')
         logFile = open("logs_" + currentTime + ".txt", 'w+')
-        self._fileLogger = can.Printer(logFile)
+        logFile.write("Logging messages\n")
+        logFile.flush()
+        self._file_logger = can.Printer(logFile)
 
-        listenersList = [self._main_listener, self._fileLogger, self._gps_interface, self._bms_interface]
+        listenersList = [self._main_listener, self._file_logger, self._gps_interface, self._bms_interface]
 
         # initialize the notifier
         self._notifier = can.Notifier(self._bus, listenersList)
