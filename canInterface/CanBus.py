@@ -13,6 +13,7 @@ class CanBus:
     _main_listener = None
     _gps_interface = None
     _bms_interface = None
+    _file_logger = None
     _notifier = None
 
     # global variables
@@ -27,6 +28,7 @@ class CanBus:
 
     def __init__(self):
         # Initialize the CAN interface
+        os.system('sudo /sbin/ip link set can0 down type can')
         os.system('sudo /sbin/ip link set can0 up type can bitrate 500000')
 
         _interface = 'socketcan_native'
@@ -34,8 +36,7 @@ class CanBus:
         _bitrate = 500000
 
         # Setup the initialize the bus
-        global _bus
-        _bus = can.interface.Bus(bustype=_interface, channel=_channel)
+        self._bus = can.interface.Bus(bustype=_interface, channel=_channel)
 
         # initialize the main listener
         self._main_listener = can.BufferedReader()
@@ -46,12 +47,13 @@ class CanBus:
         ## universal time in UTC
         ts=time.time()
         currentTime = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d_%H:%M:%S')
-        fileLogger = can.Printer("logs_" + currentTime + ".txt")
+        logFile = open("logs_" + currentTime + ".txt", 'w+')
+        self._fileLogger = can.Printer(logFile)
 
-        listenersList = [self._main_listener, fileLogger, self._gps_interface, self._bms_interface]
+        listenersList = [self._main_listener, self._fileLogger, self._gps_interface, self._bms_interface]
 
         # initialize the notifier
-        self._notifier = can.Notifier(_bus, listenersList)
+        self._notifier = can.Notifier(self._bus, listenersList)
 
         
     def get_new_errors(self):
