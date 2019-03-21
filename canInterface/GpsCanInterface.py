@@ -23,7 +23,7 @@ class GpsCanInterface(can.Listener):
 
     def on_message_received(self, msg):
         # Parse Message
-        print("GPS interface message received: " + msg.__str__())
+        #print("GPS interface message received: " + msg.__str__())
         
         if msg.arbitration_id == self._arbitration_ids['gps_position_detailed']:
             self.process_gps_position_detailed(msg)
@@ -32,7 +32,7 @@ class GpsCanInterface(can.Listener):
         elif msg.arbitration_id == self._arbitration_ids['gps_speed_and_direction']:
             self.process_gps_speed_and_direction(msg)
         else :
-            print("No appropriate gps message handler found for message: " + msg.__str__())
+            #print("No appropriate gps message handler found for message: " + msg.__str__())
         
 
     def process_gps_position_detailed(self,msg):

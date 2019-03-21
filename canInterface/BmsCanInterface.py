@@ -13,7 +13,7 @@ class BmsCanInterface(can.Listener):
     _arbitration_ids = {
         'battery_pack_voltage': None,
         'request_identifier': '01000000001',
-        'respone_identifier': '01001000001'
+        'response_identifier': '01001000001'
     }
 
     request_unique_ids = {
@@ -38,14 +38,15 @@ class BmsCanInterface(can.Listener):
 
     def on_message_received(self, msg):
         # Parse Message
-        print("BMS interface message received: " + msg.__str__())
+        #print("BMS interface message received: " + msg.__str__())
 
         if msg.arbitration_id == self._arbitration_ids['response_identifier']:
             self.parse_response(msg.data)
         else : 
-            print("No appropriate bms message handler found for message: " + msg.__str__())
+            #print("No appropriate bms message handler found for message: " + msg.__str__())
 
     def parse_response(self, data):
+        print("message received being parsed by bms handler")
         if data[1] == self.request_unique_ids['newest_events']:
             self.read_newest_events(data)
 
