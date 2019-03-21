@@ -33,6 +33,7 @@ class GpsCanInterface(can.Listener):
             self.process_gps_speed_and_direction(msg)
         else :
             #print("No appropriate gps message handler found for message: " + msg.__str__())
+            pass
         
 
     def process_gps_position_detailed(self,msg):
