@@ -71,12 +71,12 @@ class BmsCanInterface(can.Listener):
 
     def send_request(self, data, arbitration_id=_arbitration_ids['request_identifier']):
         message = Message(arbitration_id=arbitration_id, is_extended_id=False, data=data)
-        self.bus.send(message)
+        self.bus._bus.send(message)
 
     def send_generic_request(self, unique_id):
         request_data = self.generic_request_data(unique_id)
         message = Message(arbitration_id=self._arbitration_ids['request_identifier'], is_extended_id=False, data=request_data)
-        self.bus.send(message)
+        self.bus._bus.send(message)
 
     def generic_request_data(self, unique_id):
         return bytearray(unique_id + '\x00\x00\x00\x00\x00\x00\x00')
