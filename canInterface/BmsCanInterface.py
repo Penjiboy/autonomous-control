@@ -44,6 +44,7 @@ class BmsCanInterface(can.Listener):
             self.parse_response(msg.data)
         else : 
             #print("No appropriate bms message handler found for message: " + msg.__str__())
+            pass
 
     def parse_response(self, data):
         print("message received being parsed by bms handler")
