@@ -6,6 +6,7 @@ import threading
 from can import Message
 from GpsCanInterface import GpsCanInterface
 from BmsCanInterface import BmsCanInterface
+from VescCanInterface import VescCanInterface
 
 class CanBus: 
     
@@ -13,6 +14,7 @@ class CanBus:
     _main_listener = None
     _gps_interface = None
     _bms_interface = None
+    _vesc_interface = None
     _file_logger = None
     _notifier = None
 
@@ -42,6 +44,7 @@ class CanBus:
         self._main_listener = can.BufferedReader()
         self._gps_interface = GpsCanInterface(self)
         self._bms_interface = BmsCanInterface(self)
+        self._vesc_interface = VescCanInterface(self)
 
         # initialize the file logger
         ## universal time in UTC
@@ -52,7 +55,7 @@ class CanBus:
         logFile.flush()
         self._file_logger = can.Printer(logFile)
 
-        listenersList = [self._main_listener, self._file_logger, self._gps_interface, self._bms_interface]
+        listenersList = [self._main_listener, self._file_logger, self._gps_interface, self._bms_interface, self._vesc_interface]
 
         # initialize the notifier
         self._notifier = can.Notifier(self._bus, listenersList)
