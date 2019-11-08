@@ -8,6 +8,7 @@ import common
 import gps
 import logs
 import vesc
+import Steering
 
 #define global variables here
 #Add data as needed
@@ -26,12 +27,29 @@ radioData = {
 
 }
 
-
+#result stores item that should be written to the log every iteration
+result = {}
 
 def run():
-    #start thread to read remote controller input, store as global variable, update variables above
-    if 
+    #create ais, bms, gps, irid, rf instance here
 
+    #loop to execute forever
+    while True:
+        #start thread to read remote controller input, store as global variable, update variables above
+        if radioData.get("control mode", False)  == "controller":
+            controller_run()
+        elif radioData.get("control mode", False)  == "auto":
+            autonomous_run()
+        
+
+
+    return
+def autonomous_run():
+    #decide what we should do here
+    return
+
+def controller_run():
+    #decide what we should do here
     return
 
 if __name__ == "__main__":
