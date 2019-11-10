@@ -1,9 +1,11 @@
+# Import Python core modules
 import can
 import os
 import datetime
 import time
 import threading
 from can import Message
+
 from GpsCanInterface import GpsCanInterface
 from BmsCanInterface import BmsCanInterface
 from VescCanInterface import VescCanInterface
