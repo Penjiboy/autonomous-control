@@ -3,13 +3,19 @@ import can
 import time
 import sys
 
-# Import our common module
+# Import our common modules
 import bms
 import common
 import gps
 import logs
 import vesc
-import Steering
+import steering
+import ais
+import irid
+import rf
+
+
+
 
 #define global variables here
 #Add data as needed
@@ -33,8 +39,7 @@ result = {}
 
 def run():
     #create ais, bms, gps, irid, rf instance here
-    bus = can.interface.Bus(channel='can0', bustype='socketcan_native') 
-    msg = can.Message(arbitration_id=0x7de, data=[0, 25, 0, 1, 3, 1, 4, 1], extended_id=False)
+    
 
     #loop to execute forever
     while True:
