@@ -9,10 +9,6 @@ import common
 import gps
 import logs
 import vesc
-import steering
-import ais
-import irid
-import rf
 
 
 
@@ -44,10 +40,8 @@ def run():
     #loop to execute forever
     while True:
         #start thread to read remote controller input, store as global variable, update variables above
-        if radioData.get("control mode", False)  == "controller":
-            controller_run()
-        elif radioData.get("control mode", False)  == "auto":
-            autonomous_run()
+        print("looping")
+        time.sleep(3)
 
 
 
