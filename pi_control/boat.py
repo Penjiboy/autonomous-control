@@ -39,7 +39,7 @@ result = {}
 
 def run():
     #create ais, bms, gps, irid, rf instance here
-    
+    print("running")
 
     #loop to execute forever
     while True:
@@ -48,7 +48,7 @@ def run():
             controller_run()
         elif radioData.get("control mode", False)  == "auto":
             autonomous_run()
-        
+
 
 
     return
@@ -61,4 +61,4 @@ def controller_run():
     return
 
 if __name__ == "__main__":
-    run
+    run()
