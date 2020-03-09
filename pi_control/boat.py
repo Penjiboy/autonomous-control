@@ -10,8 +10,7 @@ import gps
 import logs
 import vesc
 
-
-
+from can.interfaces.interface import Bus
 
 #define global variables here
 #Add data as needed
@@ -30,8 +29,14 @@ radioData = {
 
 }
 
+bus
+
 #result stores item that should be written to the log every iteration
 result = {}
+
+def initCan():
+    bus = can.interface.Bus(bustype="socketcan", channel="can0", bitrate=500000)
+
 
 def run():
     #create ais, bms, gps, irid, rf instance here
