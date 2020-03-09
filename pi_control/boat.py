@@ -34,12 +34,13 @@ result = {}
 
 def initCan():
     bus = can.interface.Bus(bustype="socketcan", channel="can0", bitrate=500000)
+    return bus
 
 
 def run():
     #create ais, bms, gps, irid, rf instance here
     print("running")
-    initCan()
+    bus = initCan()
     #loop to execute forever
     while True:
         #start thread to read remote controller input, store as global variable, update variables above
