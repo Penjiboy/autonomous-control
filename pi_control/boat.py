@@ -27,8 +27,6 @@ radioData = {
 
 }
 
-bus
-
 #result stores item that should be written to the log every iteration
 result = {}
 
