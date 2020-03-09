@@ -10,8 +10,6 @@ import gps
 import logs
 import vesc
 
-from can.interfaces.interface import Bus
-
 #define global variables here
 #Add data as needed
 bmsData = {
