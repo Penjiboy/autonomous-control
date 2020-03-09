@@ -41,7 +41,7 @@ def initCan():
 def run():
     #create ais, bms, gps, irid, rf instance here
     print("running")
-
+    initCan()
     #loop to execute forever
     while True:
         #start thread to read remote controller input, store as global variable, update variables above
