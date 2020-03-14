@@ -6,7 +6,7 @@ class VescCanInterface(can.Listener):
     """
     A VescCanInterface is a subclass of Listener which handles
     a message whenever a message is received. Particularly, it will
-    handle messages it identifies as cSoming from the VESC
+    handle messages it identifies as coming from the VESC
     """
 
     node_ids = {
