@@ -5,6 +5,6 @@ import time
 def gpioSetup():
     
 
-def togglePin(pinNum)
+def togglePin(pinNum):
 
 def 
