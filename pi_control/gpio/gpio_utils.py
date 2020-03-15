@@ -2,9 +2,9 @@ import RPi.GPIO as GPIO
 import time
 
 
-def gpioSetup():
+# def gpioSetup():
     
 
-def togglePin(pinNum):
+# def togglePin(pinNum):
 
-def 
+# def
