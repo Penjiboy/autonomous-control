@@ -17,6 +17,8 @@ class NMEAFrame:
     num_bytes = 0
     # a byte array containing the complete message
     frame = []
+    # flag for the state of the frame
+    flag = 0
 
     # Assuming:
     # 1. byte_size is greater than 8
@@ -32,30 +34,28 @@ class NMEAFrame:
     def parse_packet(self, packet):
         for i in range(0, len(packet)):
             self.frame.append(packet[i])
-        self.check_end_of_frame()
+        return self.check_end_of_frame()
 
-    # Given a 2D array of bytes called a packets. Add these bytes to the main frame
-    def parse_multi_packets(self, packets, num_packets):
-        self.check_end_of_frame()
-
+    # Flag indicates if frame is valid
     def get_frame(self):
-        return self.frame
+        return self.flag, self.frame
 
     def check_end_of_frame(self):
         if len(self.frame) < self.num_bytes:
-            return 0, self.frame
+            self.flag = 0
         elif len(self.frame) == self.num_bytes:
-            return 1, self.frame
+            self.flag = 1
         else:
-            print("Error, more bytes received than expected")
-            return 0, self.frame
+            raise ValueError("Error, more bytes received than expected")
+            self.flag = -1
+        return self.flag
 
 
 packet = [20, 15, 200, 150, 14, 44, 66, 77]
-Frame = NMEAFrame(15, packet)
+Frame = NMEAFrame(16, packet)
 print("bytes: ", Frame.num_bytes)
 print("packets: ", Frame.num_packets)
 Frame.parse_packet(packet)
 print(Frame.get_frame())
-Frame.parse_packet(packet)
-print(Frame.get_frame())
+# Frame.parse_packet(packet)
+# print(Frame.get_frame())
