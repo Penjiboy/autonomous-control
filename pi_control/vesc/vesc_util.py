@@ -2,7 +2,7 @@ import can
 from can import Message
 from common.can_bus import CanBus
 
-class AisUtility():
+class VescUtility():
 
     def __init__(self, message_bus):
         """

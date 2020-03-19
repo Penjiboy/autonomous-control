@@ -1,6 +1,6 @@
 import can
 from can import Message
-import CanBus
+from common.can_bus import CanBus
 
 class BmsCanInterface(can.Listener):
     """

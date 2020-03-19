@@ -1,7 +1,7 @@
 import can
 from can import Message
 #from canInterface.CanBus import CanBus # not sure if this is necessary
-import CanBus # not sure if this is necessary
+from common.can_bus import CanBus # not sure if this is necessary
 
 class GpsCanInterface(can.Listener):
     """

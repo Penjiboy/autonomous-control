@@ -2,6 +2,7 @@
 import can
 import time
 import sys
+import os
 
 # Import our common modules
 import bms
@@ -9,12 +10,11 @@ import common
 import gps
 import logs
 import vesc
-import steering
+import Steering
 import ais
 import irid
 import rf
-
-
+from common.can_bus import CanBus
 
 
 #define global variables here
@@ -39,7 +39,7 @@ result = {}
 
 def run():
     #create ais, bms, gps, irid, rf instance here
-    
+    canInstance = CanBus()
 
     #loop to execute forever
     while True:

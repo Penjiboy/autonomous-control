@@ -6,9 +6,14 @@ import time
 import threading
 from can import Message
 
-from GpsCanInterface import GpsCanInterface
-from BmsCanInterface import BmsCanInterface
-from VescCanInterface import VescCanInterface
+from gps.gps_listener import GpsCanInterface
+from gps.gps_utils import GpsUtility
+from bms.bms_listener import BmsCanInterface
+from bms.bms_utils import BmsUtility
+from vesc.vesc_listener import VescCanInterface
+from vesc.vesc_util import VescUtility
+from ais.ais_listener import AisCanInterface
+from ais.ais_util import AisUtility
 
 class CanBus: 
     
@@ -19,6 +24,11 @@ class CanBus:
     _vesc_interface = None
     _file_logger = None
     _notifier = None
+
+    _bms_util =  None
+    _ais_util =  None
+    _gos_util =  None
+    _vesc_util =  None
 
     # global variables
     bms_soc = None
@@ -47,6 +57,13 @@ class CanBus:
         self._gps_interface = GpsCanInterface(self)
         self._bms_interface = BmsCanInterface(self)
         self._vesc_interface = VescCanInterface(self)
+        self._ais_interface = VescCanInterface(self)
+
+        # initialize the utility objects
+        self._bms_util = BmsUtility(self._bus)
+        self._gps_util = BmsUtility(self._bus)
+        self._ais_util = BmsUtility(self._bus)
+        self._vesc_util = BmsUtility(self._bus)
 
         # initialize the file logger
         ## universal time in UTC
@@ -68,6 +85,11 @@ class CanBus:
         self._error_buffer.clear()
         return new_error_list
 
-    def send_message(self, arbitration_id=0, data=None, is_extended_id=False):
-        message = Message(arbitration_id=arbitration_id,is_extended_id=is_extended_id,data=data)
-        self._bus.send(message)
+    #One method for each set action
+    def setVoltage(self,data):
+        # We should be able to get these information from the datasheet
+        arbId = 0
+        isExtended = False
+        message = Message(arbitration_id=arbId,is_extended_id=isExtended,data=data)
+        self._bms_util.sendMessage(message, self._bus)
+

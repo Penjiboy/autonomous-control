@@ -1,10 +1,12 @@
 import RPi.GPIO as GPIO
 import time
 
+class GpioUtility:
+    def __init__(self):
+        return
 
-def gpioSetup():
-    
+    def gpioSetup(self):
+        return
 
-def togglePin(pinNum)
-
-def 
+    def togglePin(self, pinNum):
+        return
