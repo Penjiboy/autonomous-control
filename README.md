@@ -1,4 +1,4 @@
-# autonomous-control
+# autonomous-control (Discontinued repo)
 
 This is the repository for UBC Voyage's flagship autonomous control package.
 When contributing to this project please follow The Google C++ Style Guide
